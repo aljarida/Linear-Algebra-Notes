@@ -1,0 +1,2701 @@
+\documentclass[12pt]{article}
+\usepackage{amssymb, amsmath}
+\usepackage [english]{babel}
+\usepackage [autostyle, english = american]{csquotes}
+\MakeOuterQuote{"}
+
+\newcommand{\gen}[1]{\mathrm{Gen}\{{#1}\}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\bt}[1]{\textbf{{#1}}}
+\newcommand{\bm}[1]{\mathbf{{#1}}}
+\newcommand{\mb}{\begin{bmatrix}}
+\newcommand{\me}{\end{bmatrix}}
+\newcommand{\adj}[1]{\textrm{adj$({#1})$}}
+\newcommand{\area}[1]{\textrm{area$({#1})$}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\vecbrac}[1]{\left\langle{#1}\right\rangle}
+\newcommand{\mmb}[1]{\mathbb{{#1}}}
+\newcommand{\mmc}[1]{\mathcal{{#1}}}
+\newcommand{\set}[1]{\{{#1}\}}
+\newcommand{\theorem}[1]{\bt{Theorem: }{\emph{{#1}}}}
+\newcommand{\abs}[1]{|{#1}|}
+\newcommand{\norm}[1]{||{#1}||}
+
+\title{Linear Algebra: Complete Notes}
+
+\begin{document}
+
+\maketitle
+
+\section*{Systems of Linear Equations}
+
+A \textbf{linear equation} with variables $x_1,\dots,x_n$ can be written:
+
+$$a_1x_1+\dots+a_nx_n = b$$
+
+Where $b$ and the coefficients $a_c$ are real or complex numbers typically
+known in advance. \\ \\
+
+A \textbf{system of linear equations}, or a \textbf{linear system}, is a collection
+of one more linear equations with the same variables (e.g. $x_1,\dots,x_n$).
+
+E.g.\dots
+
+\begin{enumerate}
+    \item $2x_1 -2x_2 +3x_3 = 8$
+    \item $x_2 -4x_3 = -7$
+    \item $x_3 = 2$
+\end{enumerate}
+
+A \textbf{solution} \emph{of the system} is a list of numbers ($s_1,\dots,s_n$)
+that give a valid answer to each equation when utilizing the values of $s_c$
+in place of each $x_c$ ($s_1 \rightarrow x_1$, and so on). \\ \\
+
+The set of all possible solutions is the \textbf{solution set} \emph{of the linear system}. \\ \\
+
+Two linear systems are \textbf{equivalent} if they have the same solution set. \\ \\
+
+A linear system is \textbf{consistent} if it has one or infinite solutions. \\ \\
+
+A linear system is \textbf{inconsistent} if it has no solution. \\ \\
+
+If a system has each variable aligned in columns, the matrix is known as a \textbf{coefficient matrix}. \\ \\
+
+If the coefficient matrix has the constant of the equation in the last column, then it is known as the \textbf{augmented matrix}. \\ \\
+
+There are three basic operations, \textbf{elemental row operations}, for simplifying a linear system:
+
+\begin{enumerate}
+    \item \textbf{Replacement}: Replacing an equation with the addition of it and a multiple of another.
+    \item \textbf{Interchange}: Interchanging two equations.
+    \item \textbf{Scaling}: Multiplying all terms of an equation with by a constant $k \neq 0$.
+\end{enumerate}
+
+Two matrices are \textbf{row-equivalent} if there exists a sequence of \emph{elemental row operations} that transform
+one matrix to the other. \\ \\
+
+If the \emph{augmented matrices} of two linear systems are row-equivalent, then the two systems \emph{have the same solution set}.
+
+This is to say that every set of solutions such as $(s_1,\dots,s_n)$, however many exist, solve equally both matrices. \\ \\
+
+A matrix is in \textbf{staggered} or \textbf{staircase} form if it has these three properties:
+
+\begin{enumerate}
+    \item No row with all $0$'s for its coefficients lies above a row with non-zero coefficients.
+    \item Every \textbf{principal entry}, or first non-zero number, of a row is \emph{at least} one column to the right of the principal entry in the row above.
+    \item Every number in the same column below a \emph{principal entry} is $0$.
+\end{enumerate}
+
+A \emph{staggered} matrix is in \textbf{\emph{reduced} staircase form} if\dots
+
+\begin{enumerate}
+    \item The principle entry of every file is $1$.
+    \item Every principal entry is the only entry $\neq 0$ in its column.
+\end{enumerate}
+
+To elaborate on the above rules\dots
+
+\begin{itemize}
+    \item This means that every entry in a row right up until its principal entry \emph{must be} $0$ in both staircase forms.
+    \item Staircase form \emph{can} have principal entries not equal to 1; reduced staircase form \emph{requires} each principal entry to be $1$ or $0$.
+    \item Staircase form \emph{can} have non-zero numbers above its principal entries; reduced staircase forms \emph{requires} every number above a principal entry to be $0$.
+\end{itemize}
+
+Every matrix is \emph{row-equivalent} to \emph{one and only one} reduced staircase matrix. \\ \\
+
+If a staircase matrix $U$ is row-equivalent with a matrix $A$, then $U$ is \textbf{staircase form} of $A$. \\ \\
+
+If $U$ is a reduced staircase matrix, then $U$ is \emph{the} reduced staircase form of $A$. \\ \\ 
+
+A \textbf{pivot position} in a matrix $A$ is a location in $A$ which corresponds with a principal entry $1$ in
+the staircase reduced form of $A$. \\ \\
+
+A \textbf{pivot column} is simply a column of $A$ that contains a \emph{pivot position}. \\ \\
+
+These are the steps of row-reduction for solving a linear system:
+
+\begin{enumerate}
+    \item Write the augmented matrix of the system.
+    \item Use the row-reduction algorithm to obtain the staircase form.
+    \item Determine if the system is consistent. If it is not, terminate this process.
+    \item Bring the matrix to reduced staircase form.
+    \item Write the resulting system of equations.
+    \item Rewrite each non-zero equation so that its single \emph{basic variable} is expressed in terms of any of the \emph{free variables} that appear in the equation.
+\end{enumerate}
+
+Variables that correspond with the \emph{pivot columns} are known as \textbf{basic variables}. \\ \\
+
+Variables that correspond with with \emph{non-pivot} columns are known as \textbf{free variables}. \\ \\
+
+A \textbf{pivot} is a number $\neq 0$ in a \emph{pivot position}. \\ \\
+
+Every different assignment of a free variable determines a unique solution to the linear system.
+
+Therefore, if there is a free variable, the system has infinite solutions. \\ \\
+
+In this case where we have the following equations\dots
+
+\begin{itemize}
+    \item $1x_1 + 0x_2 + 5x_3 = 1$
+    \item $0x_1 + 1x_2 + 1x_3 = 4$
+    \item $0x_1 + 0x_2 + 0x_3 = 0$
+\end{itemize}
+
+\dots we find that $x_1 = 1 - 5x_3$ and $x_2 = 4 - x_3$. Because $x_1$ and $x_2$ can take on any needed values to equate to $1 + 5x_3$ and $4 - x_3$,
+$x_3$ is free (\emph{unbound} by other variables) to take on any arbitrary value; the other variables will adjust for it.
+
+Note that $x_1, x_2$ are \emph{bound} and can not take on any arbitrary value. They are bound to take on needed values determined by the unbound $x_3$. \\ \\
+
+Free variables act as \textbf{parameters}. Solving a system means to find a \emph{parametric description} of the
+solution set or to determine that the solution set \emph{is empty}. \\ \\
+
+A linear system is \emph{consistent} if and only if the column most right of the augmented matrix is \textbf{not} a pivot column. \\ \\
+
+In other words, the matrix is consistent if it does not have any row of type $[0 \dots 0 = b_c]$ where $b_c \neq 0$ \emph{after reduction}. \\ \\
+
+If a linear system is consistent, the solution set contains either a unique solution (\emph{without} free variables) or infinite solutions (\emph{with}).
+
+\section*{Vector Equations}
+
+A matrix of a single column is a \textbf{column vector} or simply a \textbf{vector}. \\ \\
+
+Example of vectors include
+$\bm{u} =\begin{bmatrix} 3 \\ -1 \end{bmatrix},
+\bm{v} =\begin{bmatrix} .2 \\ .3 \\ 11 \end{bmatrix},
+\bm{w} = \begin{bmatrix} w_1 \\ w_2 \end{bmatrix}$. \\ \\
+
+$\mathbb{R}^2$ indicates the set of all vectors with two entries. \\ \\
+
+$\mathbb{R}$ represents all real numbers. The exponent indicates the number of entries. \\ \\
+
+Two vectors are equal if and only if the corresponding entries are equal. For example\dots
+
+$$\begin{bmatrix} 4 \\ 7 \\ \end{bmatrix} \neq \begin{bmatrix} 7 \\ 4 \\ \end{bmatrix}$$ \\ \\
+
+A vector $\bm{u} =\begin{bmatrix} 3 \\ - 1\end{bmatrix} \cdot c = \begin{bmatrix} c\cdot 3 \\ c\cdot -1 \end{bmatrix}$. \\ \\
+
+If $c = 5$, we then have $\begin{bmatrix} 15 \\ -5 \end{bmatrix}$. \\ \\
+
+In the above case, $c$ is a \textbf{scalar}. Unlike vectors which are \textbf{bolded} in notation, scalars are typically written in \emph{italics}. \\ \\
+
+$\mathbb{R}^2$ is the set of all points in the plane. \\ \\
+
+The sum of vectors $\bm{u} + \bm{v}$ can be visualized geometrically as forming a parallelogram in which its other vertices, apart from $\bm{u+v}$, are $\bm{u, v, 0}$. \\ \\
+
+In $\mathbb{R}^n$ where $n$ is a positive integer, it denotes the collection of all lists of $n$ real numbers. \\ \\
+
+The zero vector is a vector of all $0$'s denoted $\bm{0}$, $\vec{0}$ or simply $0$. The number of $0$ entries present within the vector is incidated by context. \\ \\
+
+The equality of vectors in $\mathbb{R}^n$ is evaluated, and operations of scaling and addition are performed, entry by entry. \\ \\
+
+The \textbf{algebraic properties of vectors in $\mathbb{R}^n$} are the following:
+
+\begin{enumerate}
+    \item $\bm{u + v = v + u}$
+    \item $\bm{(u + v) + w = u + (v + w)}$
+    \item $\bm{u + 0 = 0 + u = u}$
+    \item $\bm{u + (-u) = -u + u = 0} \textrm{ where } -\bm{u} \rightarrow (-1)\bm{u}$
+    \item $c(\bm{u} + \bm{v}) = c\bm{u} + c\bm{v}$
+    \item $(c + d)\bm{u} = c\bm{u} + d\bm{u}$
+    \item $c(d\bm{u}) = (cd)(\bm{u})$
+    \item $1\bm{u} = \bm{u}$
+\end{enumerate}
+
+Given the vectors $\bm{v_1},\dots,\bm{v_p}$ and the scalars $c_1,\dots,c_p$, a combination $\bm{y}$ is defined:
+
+$$\bm{y} = c_1\bm{v_1} + \cdots + c_p\bm{v_p}$$
+
+Note that \bt{y} is a \textbf{linear combination} of vectors $\bm{v_c}$ with \textbf{weights} $c_c$, and together their
+equation represents a \emph{vector equation}. \\ \\
+
+Each entry of $\bm{y}$, $y_i$ is represented:
+
+$$y_i = c_1(\bm{v_1})_i + \dots + c_p (\bm{v_p})_i$$
+
+If $\bm{v_1,\dots,v_p}$ is in $\mathbb{R}^n$, then the set of all linear combinations of those vectors is denotated:
+
+$$\gen{\bm{v_1},\dots,\bm{v_p}}$$
+
+The above is the subset of $\R^n$ generated by $\bm{v_1},\dots,\bm{v_p}$.  In other words, it is the set of all possible scalar combinations of the given vectors. \\ \\
+
+In \emph{other} other words, it is the set of all vectors that can be written in the form $c_1\bm{v_1} +c_2\bm{v_2} + \dots + c_p\bm{v_p}$ with scalars $c_1,\dots,c_p$. \\ \\
+
+A \textbf{vector equation} of the form $x_1\bm{a_1} + \dots + x_n\bm{a_n} = \bm{b}$ (as seen just before) has the same solution set
+as the linear system whose augmented matrix is $[\bm{a_1} \dots \bm{a_n} = \bm{b}]$. \\ \\
+
+Matrices are simply alternative notation for vector equations. \\ \\
+
+Note that \bt{b} represents the rightmost column of the augmented matrix and contains the values which the equations of the coefficient
+matrix are equal to or are \emph{supposed to be} equal to. \\ \\
+
+It is such that $\bm{b}$ can be generated through a linear combination of $\bm{a_1},\dots,\bm{a_n}$ if and only if
+there exists a \emph{solution to the linear system} which corresponds to the matrix. \\ \\
+
+If \bt{v} is a vector $\neq 0$ in $\R^3$, then $\gen{\bm{v}}$ is the set of all the scalar multiples of \bt{v} and $\gen{\bm{v}}$ forms a straight line extending infinitely between $0$ and \bt{v} and beyond, positively and negatively. \\ \\
+
+$\gen{\bm{u, v}}$, where $\bm{u} \neq 0 \neq \bm{v}$ and $\bm{u} \neq \bm{v}$, forms a plane with the two lines that pass through $\bm{u}, 0$ and $\bm{v}, 0$.
+
+It includes all possible scalar combinations of $\bm{u}$ and $\bm{v}$. \\ \\
+
+Let $A_{m\times n}$ be a matrix with columns $\bm{a_1},\dots,\bm{a_n}$, and let $\bm{x}$ exist in $\R^n$. The product is denoted $A\bm{x}$, the linear combination of columns of $A$ with weights from the entries of vector $\bm{x}$.
+
+$$A\bm{x} = [\bm{a_1} \dots \bm{a_n}] \begin{bmatrix} x_1 \\ \vdots \\ x_n \end{bmatrix} = x_1\bm{a_1} + \dots + x_n\bm{a_n}$$
+
+As can be seen by the notation, each column of $A$ is represented as a vector $\bm{a_c}$. Likewise each value of $\bm{x}$ is a scalar $x_c$. \\ \\
+
+If $A_{m\times n}$ is a matrix with columns $\bm{a_1, \dots, a_n}$  and if \bt{b} is in $\R^m$, then the matrix equation $A\bm{x} = \bm{b}$ has the same solution set as the vector equation\dots
+
+$$x_1\bm{a_1} + \dots + x_n\bm{a_n = b}$$
+
+And thus the above could be written all as\dots
+
+$$A\bm{x} =
+\underbrace{\mb a_{1,1} & \dots & a_{1,n} \\
+\vdots & \ddots & \vdots \\
+a_{m,1} & \dots & a_{m,n} \me}_{m \times n} 
+\underbrace{\mb x_1 \\ \vdots \\ x_n \me}_{n \times 1} =
+\underbrace{\mb b_1 \\ \vdots \\b_m \me}_{m\times 1} = x_1\bm{a_1} + \dots + x_n\bm{a_n} = \bm{b}$$
+
+In the above, $m$ could be of any length, and what would change is that each $x_c\bm{a_c}$ would become of the new $m \times 1$ size, and $\bm{b}$ as well. \\ \\
+
+See that each $x_c$ exclusively pairs to each column $\bm{a_c}$ and multiplies it. \\ \\
+
+See also that $x_1\bm{a_1} + \dots + x_n\bm{a_n}$ has the same solution set as the linear system of equations whose augmented matrix is:
+
+$$[\bm{a_1 \dots a_n = b}]$$
+
+The equation $A\bm{x = b}$ has a solution if and only if \bt{b} is a linear combination of the columns of $A$. \\ \\
+
+Let $A_{m \times n}$ be a matrix. Then the following are either all true or all false:
+
+\begin{enumerate}
+    \item For every \bt{b} in $\R^m$, $A\bm{x=b}$ has at least one solution. (Note that \bt{b} is a matrix $m\times 1$ and lies in the codomain of $A$.)
+    \item Every \bt{b} in $\R^m$ is a linear combination of the columns of $A$.
+    \item The columns of $A$ generate $\R^m$.
+    \item $A$ has a pivot position in every row.
+\end{enumerate}
+
+See the following properties:
+
+\begin{enumerate}
+    \item If every row has a pivot, the linear system $A\bm{x} = \bm{b}$ has $\geq 1$ solution for every \bt{b}.
+    \item If every column has a pivot, $A\bm{x} = \bm{b}$ has $\leq 1$ solution.
+    \item If both every row and every column has a pivot, then $A$ \emph{has to be a \textbf{square}} matrix and $A\bm{x} = \bm{b}$ has a \bt{single, unique} solution for every \bt{b}.
+\end{enumerate}
+
+See the examples below which correspond with the above properties:
+
+$$
+A_{3 \times 4} = \underbrace{\mb
+* & * & * & * \\
+0 & * & * & * \\
+0 & 0 & * & * \me}_{\geq \; 1 \textrm{ solution}},
+A_{4\times 3} = \underbrace{\mb
+* & * & * \\
+0 & * & * \\
+0 & 0 & * \\
+0 & 0 & 0 \me}_{\leq \; 1 \textrm{ solution}},
+A_{3 \times 3} = \underbrace{\mb
+* & * & * \\
+0 & * & * \\
+0 & 0 & * \me}_{= \; 1 \textrm{ solution}}
+$$
+
+For a $m\times n$ matrix, \emph{there can only be $\leq \min (m, n)$ pivots}.
+
+\begin{itemize}
+    \item If there were more pivots than $m$, there would be rows with more than one pivot, which is impossible.
+    \item If there were more pivots than $n$, there would be columns with more than one pivot. This is also impossible.
+    
+\end{itemize}
+
+Recall that a pivot (position) requires a reduced staircase form matrix and corresponds with each principal entry of 1. Each principal entry \emph{must} be to the right of the principal entry above. \\ \\
+
+Also recall that a reduced staircase form matrix can have values $\neq 1, \neq 0$ so long as they are not principal entries or in the column of a principal entry. \\ \\
+
+E.g., the below matrix is in reduced staircase form despite having two potentially non-zero, non-one values:
+
+$$\mb
+1 & 0 & c_1 & 0 & b_1 \\
+0 & 1 & c_2 & 0 & b_2 \\
+0 & 0 & 0 & 1 & b_3
+\me$$
+
+Matrices of \emph{inconsistent systems} will have a pivot position in the augmented column to the effect of\dots
+
+$$\begin{bmatrix}
+    1 & 0 & \dots & \dots & \dots & b_1 \\
+    0 & 1 & \dots & \dots & \dots & b_2 \\
+    \vdots & \vdots & & & & \vdots\\
+    0 & 0 & 0 & 0 & 0 & 1
+\end{bmatrix}$$
+
+Realize that $0x_1 + \dots + 0x_n = 0 \neq 1$. \\ \\
+
+Matrices of \bt{independent systems} have a pivot position in every column of the coefficient matrix.
+The number of pivots in this case \emph{is equal to} the number of variables being solved for, as each column is a variable. \\ \\
+
+Matrices of \bt{dependent systems} have fewer pivots than columns. There exist fewer pivots than variables, indicating there are \emph{free variables}. \\ \\
+
+Note there these two distinct ways of annotating a matrix-vector mulitiplication:
+
+\begin{enumerate}
+\item $$\begin{bmatrix}
+    1 & 2 & 4 \\
+    2 & -1 & -4 \\
+    2 & 1 & 5 
+\end{bmatrix} \begin{bmatrix}
+    x \\ y \\ z
+\end{bmatrix} = \begin{bmatrix}
+    b_1 \\ b_2 \\ b_3
+\end{bmatrix}$$
+
+\item $$x \begin{bmatrix} 1\\ 2\\ 2 \end{bmatrix} + y \begin{bmatrix} 2 \\ -1 \\ 1 \end{bmatrix} + z \begin{bmatrix} 4 \\ -4 \\ 5 \end{bmatrix} = \begin{bmatrix} b_1 \\ b_2 \\ b_3 \end{bmatrix}$$
+\end{enumerate}
+
+    The results above are exactly equivalent to this result below:
+
+\begin{enumerate}
+    \item $1x + 2y + 4z = b_1$
+    \item $2x - 1y - 4z = b_2$
+    \item $2x + 1y + 5z = b_3$
+\end{enumerate}
+
+The solution to the above (independent) linear system, which is a system of three distinct planes, is the tiny point of intersection between all of them. \\ \\
+
+If a linear system were \emph{dependent} (and in $\R^3$), then there is the possiblility the solution could be a line or even a plane.
+
+However, the solution to a linearly independent system will always be an exact point. \\ \\
+
+When thinking of the problem $A\bm{x} = \bm{b}$ as one of scalars of vectors, the question becomes of which scale factors
+are required to modify the column vectors so that the their "head-to-tail" sum reachs the exact point of the vector defined by $\bm{b}$. \\ \\
+
+Note that unless two planes are parellel, they will \emph{always} intersect. \\ \\
+
+To span a space $\R^n$, you need to have $n$ linearly independent vectors. Thus $\R^3$ can not be spanned (or \emph{generated}) by $2$ vectors (no matter how many entries they have). \\ \\
+
+Similarly, for $n$ vectors to be independent, their length must be at least $n$ as well. That is to say that $\R^n$ could not be spanned by $n$ vectors of size $(n - 1) \times 1$. \\ \\
+
+\subsection*{Vector-Vector and Matrix-Vector Operations}
+
+If a vector $\bm{u}$ and a vector $\bm{v}$ are of equal length $n$, then $\bm{u}\bm{v}^{T}$ and $\bm{v}\bm{u}^{T}$ result in matrices of $n \times n$ length.
+
+\begin{enumerate}
+\item $$\mb u_1 \\ \vdots \\ u_n \me \underbrace{\mb v_1 & \dots & v_n \me}_{\bm{v}^{T}} =
+\mb
+u_1 v_1 & \dots & u_1 v_n \\
+\vdots & \ddots & \vdots \\
+u_n v_1 & \dots & u_n v_n
+\me = \bm{uv}^T$$
+
+\item $$\mb v_1 \\ \vdots \\ v_n \me \underbrace{\mb u_1 & \dots & u_n \me}_{\bm{u}^{T}} =
+\mb
+v_1 u_1 & \dots & v_1 u_n \\
+\vdots & \ddots & \vdots \\
+v_n u_1 & \dots & v_n u_n
+\me = \bm{vu}^T$$
+\end{enumerate}
+
+Note that $\bm{uv}^T \neq \bm{vu}^T$. However $\bm{u^Tv = v^Tu}$ as both result in dot produts, or $1 \times 1$ matrices, of the two vectors.
+
+$$\underbrace{\mb v_1 & \dots & v_n \me}_{1 \times n} \underbrace{\mb u_1 \\ \vdots \\ u_n \me}_{n \times 1} = u_1 v_1 + \dots + u_n v_n = [c] = c = \bm{v}^T\bm{u} = \bm{u}^T\bm{v}$$
+
+The \bt{row-vector rule for calculating \emph{A}x} says that if multiplication is defined, the $i^{th}$ entry in $A\bm{x}$ is the sum of the products of the
+corresponding entries of row $i$ of $A$ and vector \bt{x}. \\ \\
+
+In demonstration, if $A=\begin{bmatrix} 1 & 2 \\ 3 & 4 \\ \end{bmatrix}$ and \bt{x} = $\begin{bmatrix} 5 \\ 2 \end{bmatrix}$, and if we then have $A\bm{x} = [\bm{a_1}x_1 + \bm{a_2}x_2]$, we find that\dots
+
+\begin{enumerate}
+    \item $(A\bm{x})_1 = A_{1,1}x_1 + A_{1,2}x_2 = 1\cdot 5 + 2\cdot 2 = \bm{9}$
+    \item $(A\bm{x})_2 = A_{2,1}x_1 + A_{2,2}x_2 = 3 \cdot 5 + 4\cdot 2 = \bm{23}$
+    \item We can find the same results, however, by solving ordinarily so\dots
+    $$\bm{a_1}x_1 + \bm{a_2}x_2 =
+    \begin{bmatrix} 1 \\ 3 \end{bmatrix} \cdot 5 + \begin{bmatrix} 3 \\ 4 \end{bmatrix} \cdot 2 =
+    \begin{bmatrix} 5 \\ 15 \end{bmatrix} + \begin{bmatrix} 4 \\ 8 \end{bmatrix} = \begin{bmatrix} \bm{9} \\ \bm{23} \end{bmatrix}
+    $$
+\end{enumerate}
+
+Notice the same $9$'s and $23$'s. \\ \\
+
+Let $A_{m\times n}$ be a matrix, \bt{u} and \bt{v} be vectors in $\R^n$, and $c$ be a scalar. Then:
+
+\begin{enumerate}
+    \item $A(\bm{u} + \bm{v}) = A\bm{u} + A\bm{v}$
+    \item $A(c\bm{u}) = c(A\bm{u})$
+\end{enumerate}
+
+The following example demonstrates the above principles:
+\begin{enumerate}
+    \item If $A\mb 1\\-1\\2\me = \mb1\\2\\3\me$, $A\mb2\\0\\2\me = \mb2\\4\\6\me$, and $A\bm{x} = \mb3\\6\\9\me$\dots
+    \item \dots then it follows that $A\mb2\\0\\2\me + A\mb 1\\-1\\2\me = \mb3\\6\\9\me = A\mb3\\-1\\4\me$
+    \item But likewise $1.5 \cdot A\mb2\\0\\2\me = 1.5\cdot\mb2\\4\\6\me = \mb3\\6\\9\me = A\mb3\\0\\3\me = A\mb3\\-1\\4\me$
+    \item Note that two distinct solutions for \bt{x} exist, and because there is more than one, there are infinite solutions.
+\end{enumerate}
+
+\subsection*{The Homogeneous Equation}
+
+A system of equations is \bt{homogeneous} if it can be written in the form $A\bm{x = 0}$, where $A_{m\times n}$ is a matrix
+and \bt{0} is in $\R^m$. Such a system always has at least 1 solution ($\bm{x = 0}$). \\ \\
+
+This \emph{zero solution} is known as the \bt{trivial solution}. For an equation $A\bm{x = 0}$, if a
+\bt{non-trivial solution} exists in which \bt{x} $\neq \bm{0}$, then the system must be linearly dependent and have infinite solutions for $A\bm{x} = \bm{0}$.
+
+I.e., the null space must have at least one vector and can be described as $\textrm{Nul}\,A = \gen{\bm{x}\dots}$. \\ \\
+
+The \emph{homogeneous equation} $A\bm{x = 0}$ has a \emph{non-trivial solution} if and only if it has $\geq 1$ free variable. \\ \\
+
+If $A\bm{x = b}$ is consistent for some \bt{b} and \bt{p} is a solution, then the solution set for the equation is
+the set of all vectors of the form $\bm{w = p + v_h}$ where $\bm{v_h}$ is any solution of the homogeneous equation $A\bm{x = 0}$. \\ \\
+
+Thus this means that the solution to a system is the combined solution sets of \emph{both} the given vector equation \emph{and} the homogeneous equation. \\ \\
+
+This is to say that a particular solution $\bm{p}$ can have any single solution to the homogeneous equation added to it while still holding true. \\ \\
+
+The indexed set of vectors $\{\bm{v_1},\dots,\bm{v_p}\}$ in $\R^n$ is \bt{linearly independent} if the vector equation
+$x_1\bm{v_1} + \dots + x_p\bm{v_p = 0}$ only has, as its solution, the trivial solution. \\ \\
+
+In other words, the \emph{columns} of a matrix are linearly independent if and only if the equation $A\bm{x = 0}$ only has the trivial solution. \\ \\
+
+A set of two vectors $\{\bm{v_1, v_2}\}$ is linearly \emph{dependent} if at least one of the vectors is \emph{a multiple of the other}. \\ \\
+
+If a set contains a larger number of vectors than number of entries \emph{in} each vector, then the set is \emph{linearly dependent}. I.e., f a set has $n$
+vectors but each vector has $n-1$, it is linearly dependent.
+
+E.g.\dots
+
+$$\{\bm{w_1} = \mb 1\\0\\0 \me, \bm{w_2} = \mb 0\\1\\0 \me, \bm{w_2} = \mb 0\\0\\1 \me \bm{w_4} = \mb -0.5\\1\\.8 \me\}$$
+
+Any set which contains the zero vector is linearly dependent.
+
+\section*{Linear Transformations}
+
+A \bt{transformation} (also known as a \bt{function} or \bt{map}) $T$ of $\R^n \rightarrow \R^m$, is a rule that asigns every vector \bt{x} in $\R^n$
+a vector $T(\bm{x})$ in $\R^m$. \\ \\
+
+The set of $\R^n$ is the \textbf{domain} of the transformation $T$ and the set $\R^m$ is the \textbf{codomain} of $T$. \\ \\
+
+The above can be annotated $T: \R^n \rightarrow \R^m$, meaning that $T$ transforms items in $\R^n$ to items in $\R^m$. Vectors move from the domain to the codomain. \\ \\
+
+For \bt{x} in $\R^n$ and $T(\bt{x})$ in $\R^m$, the transformation of its original form to its final form, is the \bt{image} of \bt{x}. The set of all \emph{images} of $T(\bm{x})$ is the \bt{range} of $T$. \\ \\
+
+The range is a subset and less than or equal to the codomain. \\ \\
+
+Occasionally a matrix transformation of the matrix-mulitiplication type will be denoted $\bm{x} \rightarrowtail A\bm{x}$. \\ \\
+
+See that $\bm{x} \rightarrowtail A\bm{x}$ is the same as $A\bm{x}$ and $T(\bm{x})$; it is simply a difference of notation. \\ \\
+
+Note the following about domain, codomain, and range:
+
+\begin{itemize}
+    \item The domain of $T$ is $\R^n$ when the matrix $A$ has $n$ columns.
+    \item The codomain of $T$ is $\R^m$ when every column of $A$ has $m$ entries. (This is to say when $A$ has $m$ rows across each column.)
+    \item The range of $T$ is all linear combinations of the columns of $A$ because every image $T(\bm{x})$ is of the form $A\bm{x}$.
+    \item Note that range then is a \emph{subset} (or \emph{subspace}) of the codomain.
+\end{itemize}
+
+A transformation $T$ is said to be \bt{linear} if\dots
+
+\begin{enumerate}
+    \item $T(\bm{u + v}) = T(\bm{u}) + T(\bm{v})$ for all \bt{u, v} in the domain of $T$.
+    \item $T(c\bm{u}) = cT(\bm{u})$ for all scalars $c$  and for all \bt{u} in the domain of $T$.
+\end{enumerate}
+
+If $T$ is a \emph{linear transformation}, then $T(\bm{0}) = \bm{0}$. \\ \\
+
+If $T: \R^n \rightarrow \R^m$ is a linear transformation, then there exists a unique matrix $A$ such that\dots
+
+$$\forall \bm{x} \in \R^n: T(\bm{x}) = A\bm{x}$$
+
+This is to say that there exists some matrix $A$ that describes the transformation in total and equivalently.
+Note that \bt{x} is in $\R^n$ because there are $n$ columns and each entry in \bt{x} matches to a column. \\ \\
+
+If $A$ is a $m \times n$ matrix whose $j^{th}$ column is the column vector $T(\bm{e_j})$ where $\bm{e_j}$ is the $j^{th}$
+column of the \bt{identity matrix} in $\R^n$, then the transformation matrix $A$ would be defined $A = [T(\bm{e_1})\dots T(\bm{e_n})]$. \\ \\
+
+The \emph{identity matrix} is a matrix comprised of all $0$'s apart from $1$'s which compose the diagonal and its dimensionality is $n \times n$.
+
+$$I_{1 \times 1} = I_1 = [1], \;  I_3 = \mb 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \me \\, \; I_5 = \mb 1 & 0 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 & 0 \\ 0 & 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 0 & 1 \me$$
+
+A transformation $T: \R^n \rightarrow \R^m$ is \bt{over} (\emph{onto}) $\R^m$ if every \bt{b} in the \emph{codomain} ($\R^m$) is the
+image of at least one \bt{x} in the \emph{domain} ($\R^n$).
+
+In more obvious terms, if and only if the columns of $A$ generate $\R^m$, is it over. \\ \\
+
+A transformation $T: \R^n \rightarrow R^m$ is \bt{one-to-one} if every \bt{b} in the codomain is the
+image of \emph{at most one} \bt{x} in the domain.
+
+In more obvious terms, if and only if all columns of matrix $A$ are linearly independent, the transformation is one-to-one. \\ \\
+
+Let $T: \R^n \rightarrow \R^m$ be a \emph{linear transformation}. Then $T$ is \emph{one-to-one} if and only if
+$T(\bm{x}) = \bm{0}$ has the trivial solution. \\ \\
+
+To emphasize the above's importance, let $T: \R^n \rightarrow \R^m$ be a linear transformation and $A$ its \bt{standard matrix}. Then again\dots
+
+\begin{enumerate}
+    \item $T$ maps $\R^n$ over $\R^m$ if and only if the columns of $A$ generate $\R^m$.
+    \item $T$ is one-to-one if and only if the columns of $A$ are linearly independent.
+\end{enumerate}
+
+\section*{Further Matrix Operations}
+
+In matrix notation where $A = [\bm{a_1} \dots \bm{a_n}]$, $a_{i,j}$ represents the $i^{th}$ entry of the $j^{th}$ vector.
+
+This is to say that $i$ represents rows and $j$ represents columns. \\ \\
+
+E.g., $a_{2,3}$, or $A_{2,3}$, indicates the entry at row $2$ and column $3$. \\ \\
+
+The \textbf{principal diagonal} of a matrix refers to the diagonal (top-left to
+bottom-right) line formed by all $a_{i,j}$ where $i = j$ (or all $a_{i,i}$). \\ \\
+
+A \bt{diagonal matrix} is a matrix whose non-diagonal entries are all $0$. \\ \\
+
+A matrix whose entries are all $0$ is a \bt{zero matrix} or \bt{null matrix}. \\ \\
+
+Two matrices are \textbf{equal} if they have the same number of rows and columns and their corresponding
+columns and entries are equal. \\ \\
+
+If $A$ and $B$ are matrices of $m \times n$, then the sum of $A + B$ is a matrix of the same size whose columns are the sums
+of the columns of the addends. \\ \\
+
+$A + B$ is \bt{only defined} when the matrixes are the same size. \\ \\
+
+If $r$ is a scalar and $A$ a matrix, the multiple scalar $rA$ is the matrix whose
+columns are $r$ times the columns of $A$.
+
+$$-A = (-1)A \textrm{ and } A - B = A + (-1)B$$
+
+Let $A, B, C$ be matrices of the same size. Let $r, s$ be scalars.
+
+\begin{enumerate}
+    \item $A + B = B + A$
+    \item $(A + B) + C = A + (B + C)$
+    \item $A + 0 = A$
+    \item $r(A + B) = rA + rB$
+    \item $(r + s)A = rA + sA$
+    \item $r(sA) = (rs)A$
+\end{enumerate}
+
+We see that\dots
+
+$$\bm{x} \textrm{ times } B = B\bm{x} \textrm{, and } B\bm{x} \textrm{ times } A = A(B\bm{x}) = \bm{x} \textrm{ times } AB = (AB)\bm{x}$$
+
+The \bt{file-column rule for calculating a matrix $AB$} is that the entry $ab_{i,j}$ is defined as
+the sum of the products of the corresponding entries of row $i$ of $A$ and column $j$ of B.
+
+$$(AB)_{i,j} = a_{i,1}b_{1,j} + ... + a_{i,n},b_{n,j}$$
+
+The equation above clarifies that during the process of finding products to sum, the entire $i^{th}$ row of $A$
+is multiplied sequentially along with the entire $j^{th}$ column of $B$. \\ \\
+
+Thus $(AB)_{1,1}$ calls for multiplications between all of $A$'s entries from the top-left corner straight right (row fixed)
+and all $B$'s entries from the top-left corner straight down (column fixed). \\ \\
+
+In better notation:
+
+$$(AB)_{i,j} = \sum_{\bm{k}=1}^{n}a_{i,\bm{k}}\cdot b_{\bm{k},j}$$
+
+Properties of matrix multiplication are illustrated below with $A_{m\times n}$ where $B$ and $C$ are of sizes
+such that the below operations are defined:
+
+\begin{enumerate}
+    \item $A(BC) = (AB)C \textrm{ (Associative Law)}$
+    \item $A(B + C) = AB + AC \textrm{ (Distributive Law)}$
+    \item $(B + C)A = BA + CA \textrm{ (Distributive Law)}$
+    \item $r(AB) = (rA)B = A(rB) \textrm{ for any scalar r}$
+    \item $I_mA = A = AI_n \textrm{ (Identity for Multiplication of Matrices)}$
+\end{enumerate}
+
+The last property above illustrates that for any matrix of any size, there always exists a $I$ that
+may multiply it on its left and a $I$ that may multiply it on its right. See\dots
+
+$$I_3A_{3 \times 4} = A_{3 \times 4}I_4 = A$$
+$$I_3A_{3 \times 3} = A_{3 \times 3}I_3 = A$$
+$$\rightarrow AI = IA = A$$
+
+Note the following \bt{warnings}:
+
+\begin{enumerate}
+    \item In general, $AB \neq BA$.
+    \item Laws of cancellation do not apply to matrix mulitiplication. If $AB = AC$, it is generally not certain that $B = C$. Only if $A$ is invertible can it be ascertained that $B = C$.
+    \item If a product $AB$ is the \textbf{zero matrix}, you generally can not conclude that $A = 0$ or that $B = 0$.
+\end{enumerate}
+
+If $A$ is a matrix of $n \times n$, and $k$ is a positive integer, then $A^k$ denotes the product of $k$ copies of $A$: $A^k = A_1 A_2 \dots A_k$. \\ \\
+
+Given a matrix $A_{m\times n}$, the \textbf{transpose} of $A$ is $n\times m$ and is denotated $A^T$. The \emph{transpose's} columns form
+based on the corresponding rows of $A$. \\ \\
+
+The \emph{key \bt{formula} for the transpose of a matrix is so:}
+
+$$A^T = [a_{j,i}] \textrm{ where } A = [a_{i,j}]$$
+
+Every element $a_{i,j}$ moves to a location defined by $a_{j,i}$. \\ \\
+
+Note that when $m\neq n$, the transpose of a matrix $m\times n$ becomes $n\times m$.
+
+$$A = \mb
+z & e & t & a \\
+c & e & r & o \\
+\me \rightarrow
+A^T = \mb
+z & c \\
+e & e \\
+t & r \\
+a & o \\
+\me$$
+
+Assume that $A$ and $B$ are matrices whose sizes are adequate for following sums and products:
+
+\begin{enumerate}
+    \item $(A^T)^T = A$
+    \item $(A + B)^T = A^T + B^T$
+    \item $(rA)^T = r(A^T)$ for any scalar $r$
+    \item $(AB)^T = B^TA^T$
+\end{enumerate}
+
+Note the following regarding the last property: If $A$ were $3 \times 4$ and $B$ were $4 \times 5$,
+then the product of the tranpose would be $B_{5 \times 4}A_{4 \times 3}$, which is defined.
+
+Conversely, the intuitive transposed product $A^TB^T$ would be $A_{4 \times 3}B_{5 \times 4}$, which is not defined.
+
+\section*{The Inverse of a Matrix}
+
+A matrix $A_{n\times n}$ is \textbf{invertible} if there exists a matrix $C_{n\times n}$ such that:
+
+$$CA = I, AC = I$$
+
+This \emph{unique} inverse of $A$ is denoted $A^{-1}$.
+
+$$A^{-1}A = I, AA^{-1} = I$$
+
+See that order of multiplication between a matrix and its inverse does not matter in the above cases,
+and both orders resolve in the identity matrix. \\ \\
+
+If $A^{-1}$ is a matrix, then its inverse could be denoted $(A^{-1})^{-1}$, or just $A$.
+
+Flipping the notation around, we could write, $A^{-1}$ to be $B$, and thus its inverse is $B^{-1}$, the original $A$.
+
+I.e., one inverse can not be said to be the originator or proprietor of the other. \\ \\
+
+Let $C$ be the inverse matrix. $C$ is determined uniquely by $A$ such that if $B$ \emph{were} another inverse of $A$, then it follows:
+
+$$B = BI = B(AC) = (BA)C = IC = C = A^{-1}$$
+
+A matrix that can't be inverted is called a \textbf{singular matrix}. A matrix that can is known as a \textbf{non-singular matrix}. \\ \\
+
+Likewise, if $A = \mb a & b \\ c & d \me$ and $ad-bc \neq 0$, then $A$ is invertible and\dots
+
+$$A^{-1} = \frac{1}{ad - bc}\mb d & -b \\ -c & a \me$$
+
+If $ad - bc = 0$, the matrix is not invertible. \\ \\
+
+Similarly, if the \emph{determinant}, which is what is measured by the above equation, is ever $= 0$ for any square matrix,
+then the matrix \emph{does not} have an inverse. \\ \\
+
+Conversely, if a square matrix ever has a determinant $\neq 0$, then it is \emph{guaranteed} to have an inverse. \\ \\
+
+It is \textbf{very important} to realize that all \emph{non-square} matrices are \textbf{not invertible}. \\ \\
+
+For this reason, all invertible matrices are $n \times n$, and therefore $\bt{b}$, while usually said to be in $\R^m$, is now said to be in $\R^n$. \\ \\
+
+If $A$ is an invertible matrix of $n\times n$, then \dots
+
+$$\forall \bm{b} \in \R^n: A\bm{x} = \bm{b}\textrm{ has a unique solution, } \bm{x}, \textrm{ such that } A^{-1}\bm{b} = \bm{x}$$
+
+This is analogous to the logic that if $f(x) = y$, then $f^{-1}(y) = x$. Through the inverse function, the output returns the input. \\ \\
+
+If $A$ is a $n \times n$ matrix and $B$ is its inverse, then $AB = I, BA = I$, and therefore the following holds:
+
+$$AB = [A\bm{b}_1 \; A\bm{b}_2 \; \dots \; A\bm{b}_n] = [\bm{e}_1 \; \bm{e}_2 \; \dots \; \bm{e}_n] = I$$
+$$BA = [B\bm{a}_1 \; B\bm{a}_2 \; \dots \; B\bm{a}_n] = [\bm{e}_1 \; \bm{e}_2 \; \dots \; \bm{e}_n] = I$$ \\ \\
+
+A matrix $A_{n\times n}$ is invertible if and only if $A$ is row-equivalent to $I_n$. In that case any sequence of \emph{elemental row operations} that reduces $A$ to $I_n$ also
+transforms $I_n$ to $A^{-1}$. \\ \\
+
+Remember that \textbf{row equivalence} is determined by the ability to change
+one marix into another through elementary row operations. \\ \\
+
+The \textbf{algorithm for determining $A^{-1}$} follows:
+
+\begin{enumerate}
+    \item File-reduce the augmented matrix $[A | I]$.
+    \item If $A$ is row-equivalent to $I$, then $[A | I]$ is equivalent by rows to $[I | A^{-1}]$.
+    \item Otherwise, $A$ does not have an inverse.
+\end{enumerate}
+
+The second step above may be thought of as $I$ in $[A|I]$ being built, step by step, into the matrix that summarizes all changes
+required to take $A$ to $I$. And thus $AA^{-1}$ takes $A$ to $I$. \\ \\
+
+If $A$ is invertible, $A^{-1}$ is also invertible and\dots
+
+$$(A^{-1})^{-1} = A$$
+
+If $A$ and $B$ are invertible and of ${n\times n}$, then so is $AB$ such that\dots
+
+$$(AB)^{-1} = B^{-1}A^{-1}$$
+
+Note the same pattern of distribution as in $(AB)^T = B^TA^T$. \\ \\
+
+If $A$ is is invertible, then so is $A^T$ and\dots
+
+$$(A^T)^{-1} = (A^{-1})^T$$
+
+The \textbf{theorem of the invertible matrix} states that if $A$ is a matrix of $n\times n$, then all the following are either all true or all false:
+
+\begin{enumerate}
+    \item $A$ has an inverse.
+    \item $A^T$ has an inverse.
+    \item $A$ is row-equivalent to $I_{n\times n}$. (Or more simply, $I_n$.)
+    \item $A$ has $n$ pivot positions.
+    \item $A\bm{x} = \bm{0}$ has only the trivial solution.
+    \item The columns of $A$ form a linearly independent set.
+    \item The linear transformation $\bm{x} \rightarrowtail A\bm{x}$ is one-to-one.
+    \item $A\bm{x} = \bm{b}$ has at least one solution for all \bt{b} in $\R^n$.
+    \item The columns of $A$ generate $\R^n$.
+    \item $\bm{x} \rightarrowtail A\bm{x}$ maps $\R^n$ over $\R^n$
+    \item $\exists C_{n\times n}: CA = I$
+    \item $\exists D_{n\times n}: AD = I$
+\end{enumerate}
+
+A linear transformation $T: \R^n \rightarrow \R^n$ is invertible if there exists
+$S: \R^n \rightarrow \R^n$ like so:
+
+$$\forall \bm{x} \in \R^n: S(T(\bm{x})) = \bm{x}$$
+$$\forall \bm{x} \in \R^n: T(S(\bm{x})) = \bm{x}$$
+
+Because a linear transformation $T(\bm{x})$ can be equally well represented by $A\bm{x}$, all the above
+properties of the invertible matrix can be just as well applied. \\ \\
+
+An \textbf{elemental (or \emph{elemental}) matrix} is obtained by performing a single elemental
+row operation over an identity matrix. \\ \\
+
+If a matrix $A_{m \times n}$ receives a single elemental row operation, then the resulting matrix
+could be written as $EA$ where $E_{m\times m}$ is created upon performing the same row operation on $I_m$. \\ \\
+
+All elementary matrices $E$ are invertible. The inverse of $E$ is the elemental matrix of the
+same type that transforms $E$ back to $I$.
+
+\section*{PALU Factorization}
+
+A matrix $A_{n\times n}$ is \bt{diagonal} if $A_{i,j} = 0$ for $i \neq j$. \\ \\
+
+The matrix $D = \textrm{diag}(d_1,\dots,d_n)$ denotes a diagonal matrix where $D_{i,i} = d_i$. \\ \\
+
+Both the \emph{identity} and \emph{null} matrices are diagonal matrices. \\ \\
+
+If $D$ and $F$ are both diagonal matrices and $\alpha$ is a scalar\dots
+
+\begin{enumerate}
+    \item $D + F$ and $\alpha F$ are both diagonal.
+    \item $DA$ is the matrix obtained by multiplying row $i$ of $A$ by $d_i$ from $i = 1$ to $i = n$.
+    (This is to say, by multiplying each row of $A$ by the diagonal's solitary value from its comparable row.)
+    \item $AD$ is the matrix obtained by multiplying column $i$ of $A$ by $d_i$ as $i$ grows from $0$ to $n$.
+    \item $FD = DF = \textrm{diag}(d_1f_1,\dots,d_nf_n)$
+    \item $D$ has an inverse if and only if $d_i \neq 0$ for all $i$ and $D^{-1} = \textrm{diag}(\frac{1}{d_1},\dots,\frac{1}{d_n})$
+\end{enumerate}
+
+There exist both \emph{superior} and \emph{inferior} triangle-shaped matrices in which all values either above or below the diagonal are $0$. \\ \\
+
+The matrix $A_{n\times n}$ is a \textbf{superior triangle} if $\forall i > j: A_{i,j} = 0$. All diagonal matrices are inherently \emph{superior triangles}. \\ \\
+
+Assume $U, V$ are superior triangles and $\alpha$ is a scalar. The properties of a superior triangle follow:
+
+\begin{enumerate}
+    \item $U + V$ and $\alpha U$ are superior triangles.
+    \item $UV$ is a superior triangle. If $U, V$ have ones in their diagonals, then $UV$ also has ones in its diagonal.
+    \item $U$ has an inverse if and only if $U_{i,i} \neq 0$ for $i$ from $1$ up to $n$.
+    (This is to say that the diagonal of $U$ does not contain any zeroes.)
+    \item $U^{-1}$ is, if it exists, a superior triangle. If $U$ has ones in its diagonal, then so does $U^{-1}$.
+\end{enumerate}
+
+The matrix $A_{n \times n}$ is a \textbf{inferior triangle} if $\forall i < j: A_{i,j} = 0$
+(or in other words, when $A^T$ is a superior triangle). \\ \\
+
+All diagonal matrices are inherently \emph{inferior triangles} as well. \\ \\
+
+Note\dots
+
+\begin{itemize}
+    \item If $A$ is a superior triangle, $A^T$ is an \emph{inferior} triangle.
+    \item If $A$ is an inferior triangle, $A^T$ is a \emph{superior} triangle.
+\end{itemize}
+
+Assume $L, M$ are inferior triangles of ${n\times n}$ and $\alpha$ is any scalar. Then these properties follow:
+
+\begin{enumerate}
+    \item $L + M$ and $\alpha L$ are inferior triangles.
+    \item $LM$ is an inferior triangle. If $L, M$ have ones in their diagonal, so does their product.
+    \item $L$ has an inverse if and only if $l_{i,i} \neq 0$ with $i$ from $0$ up to $n$.
+    (Again, this is to say if there are no $0$'s in its diagonal.)
+    \item If $L^{-1}$ exists, it is also an inferior triangle. If $L$ has ones in its diagonal, so does its inverse.
+\end{enumerate}
+
+A \textbf{factorization} of a matrix $A$ is an equation that expresses $A$ as a product of $\geq 2$ more matrices. \\ \\
+
+\textbf{LU Factorization} functions such that rather than $A\bm{x} = \bm{b}$\dots
+
+$$U\bm{x} = \bm{y} \textrm{ and } L\bm{y} = \bm{b}  \textrm{ and so therefore } A\bm{x} = L(U\bm{x}) = \bm{b}$$
+
+\emph{L} and \emph{U} should be thought of literally as \bt{lower} and \bt{upper}, as in they both represent lower and upper diagonal matrices, respectively. \\ \\
+
+If $A$ can be reduced to staircase form $U$ using only row replacements that add a multiple of one row to another row \textbf{\emph{below} it}, then
+there exist unitary elemental inferior triangle matrices $E_1,\dots E_p$ such that\dots
+
+$$E_p \dots E_1A = U$$
+
+Note that the above implies a multiplication of the elementary matrices. Order matters. \\ \\
+
+From the above, we continue\dots
+
+$$A = (E_p\dots E_1)^{-1}U = LU \textrm{ where } L = (E_p\dots E_1)^{-1}$$
+
+Let $A$ be $m\times n$. The factorization $A = LU$ is obtained upon bringing the matrix $A$ to the staircase form $U$ by
+\emph{exclusively using the elemental row operation \textbf{addition of a multiple of one row to another}}. \\ \\
+
+$A = LU$ expresses each row of $A$ as a linear combination of the rows of $U$. \\ \\
+
+Below represents an intuitive representation for a $3 \times 3$ matrix:
+
+$$ A = \underbrace{\mb
+1 & 0 & 0 \\
+* & 1 & 0 \\
+* & * & 1 \me}_{L}
+\underbrace{\mb
+* & * & * \\
+0 & * & * \\
+0 & 0 & * \me}_{U} \textrm{ where $* \in \R$}
+$$
+
+Note that $l_{i,j}$ is algorithmically derived by\dots
+
+$$l_{i,j} = \frac{\textrm{[element that is deleted/overriden/nullified]}}{\textrm{[pivot]}}$$
+
+This is to say that when an element in $A$ ($a_{i,j})$ is brought to $0$ in $U$, the corresponding element in $A$
+is equal to $a_{i,j}$ divided by the pivot element.
+
+\begin{itemize}
+    \item When $A = LU$, the equation $A\bm{x} = \bm{b}$ is written as $L(U\bm{x}) = \bm{b}$
+    \item Writing $\bm{y}$ in place of $U\bm{x}$, we can find $\bm{x}$ by solving the pair of equations $L\bm{y} = \bm{b}$ and $U\bm{x} = \bm{y}$.
+    \item First we clear $\bm{y}$ from $L\bm{y} = \bm{b}$ such that $L^{-1}\bm{b} = \bm{y}$.
+    \item Second we solve $U\bm{x} = \bm{y}$, where $U^{-1}\bm{y = x}$, to obtain $\bm{x}$.
+\end{itemize}
+
+$A = LU$ can not always be created in certain cases where there is \textbf{forced row-exchange}. In this case
+\textbf{PALU factorization} is obtained where $PA = LU$. \\ \\
+
+The matrix $P$ is a \textbf{permutation matrix} defined as the \emph{identity matrix} with its rows \emph{interchanged}. \\ \\
+
+The matrix $PA$ is simply the matrix $A$ with the modifying \emph{permutation} matrix $P$ that exchanges $A$'s rows. See the example below.
+
+$$\underbrace{\mb 0 & 1 & 0 \\ 1 & 0 & 0 \\ 0 & 0 & 1 \me}_P \underbrace{\mb 3 & 3 & 4 \\ 3 & 2 & 1 \\ 1 & 0 & -9 \me}_A = \underbrace{\mb 3 & 2 & 1 \\ 3 & 3 & 4 \\ 1 & 0 & -9 \me}_{PA}$$
+
+The factorization $PA = LU$ is obtained by bringing the matrix $A$ to staircase form $U$ exclusively using the elemental row operations\dots
+
+\begin{enumerate}
+    \item Subtraction of a muliple of one row from another.
+    \item Exchanging two rows.
+\end{enumerate}
+
+Further, the elemental row operation of replacing one row $i$ with a multiple of itself \textbf{can not be performed}. \\ \\
+
+$P$ may be thought of as tracking the forced row-exchanges as they occur while factoring $A$ to $LU$. \\ \\
+
+A \emph{forced row-exchange} occurs when a matrix $A$ that is being reduced to $U$ but can not be resolved to a upper staircase
+form $U$ through procedural row subtractions.
+
+See that $P(A\bm{x} = \bm{b}) = (PA\bm{x} = Pb)$. Thus this implies the following:
+
+\begin{enumerate}
+    \item $LU\bm{x} = P\bm{b}$ (Note that our LU, by design and neccesity, already accounts for the permutation effect.)
+    \item $L\bm{y} = P\bm{b}$
+    \item $U\bm{x} = \bm{y}$
+\end{enumerate}
+
+See the following\dots
+
+\begin{enumerate}
+    \item $L\bm{y} = P\bm{b} \rightarrow \bm{y} = L^{-1}P\bm{b}$
+    \item $U\bm{x} = \bm{y} \rightarrow U\bm{x} = L^{-1}P\bm{b} \rightarrow \bm{x} = U^{-1}L^{-1}P\bm{b}$
+\end{enumerate}
+
+\section*{Determinants}
+
+For $2\times 2$ matrices such as $A = \mb a & b \\ c & d\me$, the \textbf{determinant} is calculated\dots
+
+$$\det A = ad-bc$$
+
+The determinant of a $3\times 3$ matrix is calculated so:
+
+$$\triangle = \det A = a_{1,1} \cdot \det \mb a_{2,2} & a_{2,3} \\ a_{3,2} & a_{3,3} \me
+- a_{1,2} \cdot \det \mb a_{2,1} & a_{2,3} \\ a_{3,1} & a_{3,3} \me
++ a_{1,3} \cdot \det \mb a_{2,1} & a_{2,2} \\ a_{3,1} & a_{3,2} \me$$
+
+Alternatively, it may be annotated so:
+
+$$\textrm{where } A = \mb a & b & c \\ d & e & f \\ g & h & i \me \textrm{\dots}$$
+
+$$\det A = a(ei) - a(hf) -[b(di) - b(gf)] + c(dh) - c(ge) = $$
+
+$$\det A = a[ei - hf] -b[di - gf] + c[dh - ge]$$
+
+It is calculated like a cross product where $a, b, c$ are analogous to $\hat{i}, \hat{j}, \hat{k}$. \\ \\
+
+For $n \geq 2$, the \emph{determinant} de $A_{n\times n} = a_{i,j}$ is the sum of $n$ terms of the form
+$\pm a_{1,j} \cdot \det A_{1,j}$, with alternating plus and minus signs, where the entries
+$a_{1,1},\dots,a_{1,n}$ are the first row of $A$. \\ \\
+
+In notation, this looks like\dots
+
+$$\det A = a_{1,1} \det A_{1,1} - a_{1,2} \det A_{1,2} + \dots + (-1)^{1+n}a_{1,n} \det A_{1,n}$$
+
+$$det A = \sum_{j=1}^{n} (-1)^{1+j} a_{1,j} \det A_{1,j}$$
+
+Given $A = [a_{i,j}]$, the \textbf{cofactor} $(i, j)$ of $A$ is the number $C_{i,j}$ defined by\dots
+
+$$C_{i,j} = (-1)^{i+j} \det A_{i,j}$$
+
+With that equation, then\dots
+
+$$\det A = a_{1,1}C_{1,1} + a_{1,2}C_{1,2} + \dots + a_{1,n}C_{1,n}$$
+
+The determinant of a $A_{n\times n}$ can be calculated through development of cofactors lengthwise from any row.
+
+$$\det A = a_{i,1}C_{i,1} + \dots + a_{i,n}C_{i,n}$$
+
+Likewise, through any column\dots
+
+$$\det A = a_{1,j}C_{1,j} + \dots + a_{n,j}C_{n,j}$$
+
+The positivity/negativity of the cofactor $(i,j)$ depends on the position of $a_{i,j}$ in the matrix regardless
+of the sign of $a_{i,j}$. The factor $(-1)^{i+j}$ generates the following pattern:
+
+$$\mb
++ & - & + & \dots \\
+- & + & - \\
++ & - & + \\
+\vdots & & & \ddots
+\me $$
+
+If $A$ is a triangular matrix, either \emph{superior} or \emph{inferior}, then $\det A$ is the product of the entries
+on the principal diagonal of $A$. \\ \\
+
+Be aware that the determinant of the product of two matrices is the same as the product
+of the independent determinants of the matrices. Thus\dots
+
+$$\det EA = (\det E)(\det A)$$
+
+Let $A$ be a square matrix, then\dots
+
+\begin{enumerate}
+    \item If a multiple of a row of $A$ is added to another row to produce a matrix $B$,
+    then $\det B = \det A$.
+    \item If two files of $A$ are interchanged to produce $B$, then $\det B = -\det A$.
+    \item If a row of $A$ is scaled by $k$ to produce $B$, then $\det B = k \times \det A$.
+    Notice that scaling a single row affects the entire determinant by that multiple $k$.
+\end{enumerate}
+
+Let there exist the square matrix $A$ reduced to staircase form $U$ through replacements and exchanges of rows.
+Note that this is \emph{always possible} in this scenario. If there are $r$ interchanges, then\dots
+
+$$\det A = (-1)^r \det U$$
+
+If $A$ is invertible, the entries of $U$, $u_{i,i}$, are all pivots.
+This is because $A \sim I_n$ and the entries $u_{i,j}$ have not been scaled to $1$ as
+they would be in reduced staircaise form. \\ \\
+
+Note that if there exists at least one $u_{i,i} = 0$, then the product $u_{1,1} \dots u_{n,n} = 0$
+and therefore so is the determinant.
+
+\begin{itemize}
+    \item When $A$ is invertible, $\det A = (-1)^r \cdot [\textrm{the product of pivots of U}]$
+    \item When $A$ is not invertible, $\det A = 0$.
+\end{itemize}
+
+Note that the staircase form $U$ is not unique because it is not completely row-reduced and its pivots are not unique. Only the product of its pivots is unique. However, the pivot-product could both be positive and negative; this is why interchanges must be tracked. \\ \\
+
+Note the following properties about determinants:
+
+\begin{enumerate}
+    \item A square matrix $A$ is invertible if and only if $\det A \neq 0$.
+    \item Transposing a matrix does not change its determinant. See that if $A_{n\times n}$ is a matrix, then $\det A^T = \det A$.
+    \item If $A$ and $B$ are matrices of $n\times n$ (i.e., the same square size), then $\det AB = (\det A)(\det B)$.
+    \item Likewise, even if $AB \neq BA$, it is always true that $\det AB = \det BA$.
+    \item If $A$ is invertible, $\det A^{-1} = \frac{1}{\det A}$. (That is to say that the determinant of the inverse
+    is equal to the inverse of the determinant of original.)
+    \item Thus, $\det (BAB^{-1}) = \det A$.
+\end{enumerate}
+
+Regarding the last step, see\dots
+
+$$\det(BAB^{-1}) = \det B \cdot \det A \cdot \det B^{-1} = \det B \cdot \frac{1}{\det B} \cdot A = \det A$$
+
+\section*{Miscellaneous Notes and Review}
+
+Matrices do not have defined division because they are not always divisible. \\ \\
+
+However, a matrix when multiplied by its own inverse matrix results in the identity matrix. \\ \\
+
+This is the closest thing there is to standard arithmetic in which $x \cdot \frac{1}{x} = x \cdot x^{-1} = 1$.
+That is to say that $x$ times its reciprocal equals $1$. \\ \\
+
+\begin{enumerate}
+    \item Note the inverse of a two-by-two matrix where $A = \begin{bmatrix}
+        a & b \\
+        c & d
+    \end{bmatrix}$:
+    
+    $$A^{-1} = \frac{1}{\det A} \begin{bmatrix}
+        d & -b \\
+        -c & a
+    \end{bmatrix} = \frac{1}{ad - bc} \begin{bmatrix}
+        d & -b \\
+        -c & a
+    \end{bmatrix}$$
+
+    \item Now note how $A$ multiplied by $A^{-1}$ results in $I$:
+    
+    $$A^{-1}A = \frac{1}{ad-bc} \mb d & -b \\ -c & a \me \mb a & b \\ c & d \me =
+    \frac{1}{ad-bc} \begin{bmatrix}
+    da - bc & db - bd \\ -ca + ac & -cb + ad
+    \end{bmatrix} =$$
+    
+    $$\frac{1}{ad-bc} \begin{bmatrix}
+    ad - bc & 0 \\ 0 & ad - bc
+    \end{bmatrix} = 
+    \begin{bmatrix}
+    \frac{ad-bc}{ad-bc} & 0 \\ 0 & \frac{ad-bc}{ad-bc}
+    \end{bmatrix} = 
+    \begin{bmatrix}
+    1 & 0 \\ 0 & 1
+    \end{bmatrix}$$
+\end{enumerate}
+
+As said before, if $\det A \neq 0$, then $A$ has an inverse. \\ \\
+
+Just as well, if the determinant $\neq 0$, then the vectors comprising the matrix are linearly independent. \\ \\
+
+If the determinant $= 0$, then the matrix does not have an inverse. \\ \\
+
+Just as well, if the determinant $= 0$, then the vectors comprising the matrix are linearly dependent. \\ \\
+
+If we have the equation $XA = B$, then the following $X = \frac{B}{A}$ does not hold. However, $XAA^{-1} = BA^{-1} = XI = X$ does. This is to say that $X \neq \frac{B}{A}$ but that $X = BA^{-1}$. \\ \\
+
+$BA^{-1}$ can then be calculated assuming that the matrices have appropriate dimensions. \\ \\
+
+The \textbf{theorem of existence and uniquity} indicates that if a row exists in the form
+$[0\dots 0 = b_c]$, then the system is inconsistent. \\ \\
+
+A set of vectors \{$v_1, \dots, v_n$\} are linearly dependent if and only if one of the vectors is in the span of the others. \\ \\
+
+Any such vector within the span of other vectors may be removed without affecting the set's span. \\ \\
+
+If the $\bt{0}$ vector is in the set, the set is automatically linearly dependent. \\ \\
+
+The \textbf{column space} is defined as $\gen{\bm{a_1}\dots \bm{a_n}}$, all of the combinations of the columns of matrix $A$. \\ \\
+
+This is to say \emph{column space} is the set of all possible $\bm{b}$ for which the system $A\bt{x}$ has a solution. \\ \\
+
+When $n > m$, there are more columns than rows, and this means more variables than needed to describe $\bm{b}$ in $\R^m$, and therefore there exist free variables. \\ \\
+
+Likewise, when $m > n$, that is to say there are more rows than columns, there is too much dimensionality in $\R^m$ to be generated by $n$. This means that not every $\bm{b} \in \R^m$ has a solution. \\ \\
+
+In other words, when the codomain is smaller than the domain, the codomain is spanned, and when the domain is smaller than the codomain, the codomain can not be spanned. \\ \\ 
+
+The \textbf{null space} of a matrix $A$ is defined as the set of all possible solutions to the homogeneous equation $A\bm{x} = \bm{0}$. \\ \\
+
+When $A$ has $n$ columns, the \emph{null space} belongs to $\R^n$ and the null space is a subspace of $\R^n$. \\ \\
+
+A \textbf{base} of a subspace $H$ of $\R^n$ is a linearly independent set in $H$ that generates $H$. \\ \\
+
+The set $\{\bm{e_1,\dots e_n}\}$ with $\bm{e_1} = \mb 1 \\ 0 \\ \vdots \\ 0 \me$, $\bm{e_2} =  \mb 0 \\ 1 \\ \vdots \\ 0 \me$, y $\bm{e_n} =  \mb 0 \\ 0 \\ \vdots \\ 1 \me$,  forms the standard base for $\R^n$. \\ \\
+
+This is to say that the standard base for $\R^3$, for example, is defined as\dots
+
+$$\bm{e_1} = \mb 1\\0\\0 \me, \bm{e_2} = \mb 0\\1\\0 \me, \bm{e_3} = \mb 0\\0\\1 \me $$
+
+Notice that these simple bases above share the same pattern as forms the \emph{identity matrix}. \\
+
+To find the null space, you set the matrix equal to $\bm{b} = \bm{0}$, and then you reduce it.
+Afterwards, you can rewrite it as a vector equation and use $\gen{\dots}$ notation. \\ \\
+
+If the equation $\gen{\bm{a_1\dots a_n}}$ describes the column space of a matrix, then in the case that any $\bm{a_c}$ is not unique, it may be removed from $\gen{\bm{a_1\dots a_n}}$ without effect. \\ \\
+
+Note that the pivot columns of a staircase reduced matrix $B$ of an \emph{original} matrix $A$ do not form the base of $A$'s column space. \\ \\
+
+Instead it is that the pivot columns of the reduced staircase matrix $B$ inform which columns of the original matrix $A$,
+in their original state, form the column space. \\ \\
+
+\section*{Review of Midterm 1 Difficulties}
+
+\subsection*{Problem 1}
+
+Given the equations $x + ky = 1$ and $kx + y = 1$, find which values of $k$ create a unique solution, no solution, and infinite solutions. \\ \\
+
+First, we need to transform the matrices to augmented matrix form to satisfy the rubric:
+
+$$\mb 1 & k & 1 \\ k & 1 & 1 \me \xrightarrow{f_1 \cdot k} \mb k & k^2 & k \\ k & 1 & 1 \me$$
+
+By multipling row 1 by $k$, we are given a form of row 1 suitable for subtraction.
+
+$$\mb k & k^2 & k \\ k & 1 & 1 \me \xrightarrow{f_2 - f_1} \mb k & k^2 & k \\ 0 & 1 - k^2 & 1 -k \me$$
+
+When $k = 1$, we find that our matrix becomes\dots
+
+$$\mb 1 & 1 & 1 \\ 0 & 0 & 0 \me$$
+
+This indicates a singular pivot row and column and a consistent solution.
+Because $y$ is associated with a \emph{non-pivot column}, we know that $y$ is a free variable. \\ \\
+
+See that $x = 1 - y$ and that $y$ is free. Thus when $k = 1$, we have infinite solutions. \\ \\
+
+When $k = -1$, we find that\dots
+
+$$\mb k & k^2 & k \\ 0 & 1 - k^2 & 1 -k \me \xrightarrow{k \leftarrow (-1)} \mb -1 & (-1)^2 & -1 \\ 0 & 1 - (-1)^2 & 1-(-1) \me = \mb -1 & 1 & -1 \\ 0 & 0 & 2 \me$$
+
+Because $0x + 0y \neq 2$, which can be seen in the second row, the system is inconsistent. \\ \\
+
+We then find that when $1 \neq k \neq -1$, the system has two pivots, a pivot for every column and row,
+and thus has a single unique solution for a given $k$. That is two say there is \emph{one} unique set of $x, y$ for every $k \neq 1, k \neq -1$. \\ \\
+
+Note that $k$ can not take on multiple values simultaneously, and thus there \emph{are not} infinite solutions for the above.
+
+\subsection*{Problem 3}
+
+The main takeway from this is that if a third vector is not in the span of two other vectors, and given that
+the other two vectors are \emph{not} parallel (i.e., they are linearly independent), then the combination of the
+third vector with the original two creates a linearly independent set.
+
+\subsection*{Problem 6}
+
+Given the reduced staircase form matrix $\mb 1 & 0 & 0 & 1 \\ 0 & 0 & 1 & 2 \me$, whose columns are $\bm{a_1, a_2, a_3, a_4}$,
+and the knowledge that $\bm{a_1, a_2, a_3, a_4} = \mb 0 \\ 2 \me$, then we know the following:
+
+$$A \mb 1\\1\\1\\1 \me = \mb 0\\2 \me$$
+
+That is to say that a particular solution to the equation $A\bm{x} = \mb 0 \\ 2 \me$ is $\bm{p} = \mb 1\\1\\1\\1 \me$. \\ \\
+
+This particular solution could then be added with a preexisting solution set for the homogeneous equation to determine the general solution to equation. \\ \\
+
+Note that general solution is all possible solutions which create the $\bm{0}$ vector (and thus do not affect a particular solution) in addition to a particular solution.
+
+\subsection*{Problem 7}
+
+If we have the following\dots
+
+$$\mb
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & -\frac{1}{4}
+\me \mb
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 1 & 1
+\me \mb
+1 & 0 & 0 \\
+0 & 0 & 1 \\
+0 & 1 & 0 
+\me A = I
+$$
+
+We know that the matrix which reduces $A$ to $I$ is $A$'s inverse. 
+Thus the brace below which covers every matrix to the left of $A$ defines its inverse:
+
+$$\underbrace{\mb
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & -\frac{1}{4}
+\me \mb
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 1 & 1
+\me \mb
+1 & 0 & 0 \\
+0 & 0 & 1 \\
+0 & 1 & 0 
+\me}_{A^{-1}} A = I
+$$
+
+Note that we can then find $A$'s value through repeatedly dividing the component elemental
+matrices of its inverse. See that if $A^{-1}A$ is written $\underbrace{E_x E_y E_z}_{A^{-1}} A = I$, then we can perform\dots
+
+$$(E_x)^{-1}E_x E_y E_z A = (E_x)^{-1}I $$
+
+$$E_y E_z A = (E_x)^{-1}I$$
+
+And following the above pattern, we arrive at\dots
+
+$$A = (E_z)^{-1}(E_y)^{-1}(E_x)^{-1}I$$
+
+Or, in the case of our matrix above, then we have the following:
+
+$$A = \mb
+1 & 0 & 0 \\
+0 & 0 & 1 \\
+0 & 1 & 0 
+\me^{-1} \mb
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 1 & 1
+\me^{-1} \mb
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & -\frac{1}{4}
+\me^{-1} I
+$$
+
+We can find the inverses of these matrices by row-reducing them through the algorithm $[E|I]$ or
+we can intuitively understand them.
+
+$$A = \underbrace{\mb
+1 & 0 & 0 \\
+0 & 0 & 1 \\
+0 & 1 & 0 
+\me^{-1}}_{1} \underbrace{\mb
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 1 & 1
+\me^{-1}}_{2} \underbrace{\mb
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & -\frac{1}{4}
+\me^{-1}}_{3} \underbrace{I}_{4}
+$$
+
+\begin{enumerate}
+    \item This is a simple swap between row 1 and row 3.
+    To re-swap any two rows, you repeat the operation. Thus, it is its own inverse.
+    \item This is an addition of row 2 to row 3. Thus, we need to substract row 2 from row 3.
+    \item This is a scaling of row 3 by $-\frac{1}{4}$.
+    Thus we need to scale row 3 by the fraction's reciprocal, $-4$.
+    \item This is the identity matrix and can be ignored. It has no effect.
+\end{enumerate}
+
+We then find the final value of $A$ in terms of these three matrices to be\dots
+
+$$A = \mb
+1 & 0 & 0 \\
+0 & 0 & 1 \\
+0 & 1 & 0 
+\me \mb
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & -1 & 1
+\me \mb
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & -4
+\me
+$$
+
+\section*{The Rule of Cramer}
+
+\bt{The Rule of Cramer} says that if $A_{n \times n}$ is invertible,
+then for any $\bm{b}$ in $\R^n$, the unique solution $\bm{x}$, as in $A\bm{x} = \bm{b}$ has
+its entries given by the following formula:
+
+$$x_i = \frac{\det A_i(\bm{b})}{\det A}, \textrm{ where } i = 1,\dots,n$$
+
+Note that this notation means that $\bm{b}$ is replacing the $i^{th}$ column, and $\det A_i(\bm{b})$
+is the determinant of the entire $A$ matrix with its $i^{th}$ column replaced by $\bm{b}$. \\ \\
+
+Thus if $A = \mb 3 & -2 \\ -5 & 4 \me$ and $\bm{b} = \mb 6 \\ 8 \me$, then we have the following:
+
+\begin{enumerate}
+    \item We define $A_j(\bm{b})$ for all $j$\dots
+    $$A_1(\bm{b}) = \mb 6 & -2 \\ 8 & 4 \me, A_2(\bm{b}) = \mb 3 & 6 \\ -5  & 8 \me$$
+    \item Then we find $x_1, x_2$ via\dots
+    $$\frac{\det (A_1(\bm{b}))}{\det A} = x_1, \; \frac{\det (A_2(\bm{b}))}{\det A} = x_2$$
+    Finally, our \bt{b} as in $A\bm{x =b}$ is given by $\bm{b} = \mb x_1 \\ x_2 \me  = \mb 20 \\ 27 \me$
+\end{enumerate}
+
+Note that $j^{th}$ column of $A^{-1}$ is an $\bm{x}$ that satisfies the equation $A\bm{x}= \bm{e_j}$. \\ \\
+
+In other terms, $A \cdot \bm{a^{-1}_j} = \bm{e_j}$. I.e., a $j^{th}$ column of $A^{-1}$ when multiplied by $A$ gives the corresponding $j^{th}$ column of the identity matrix. \\ \\
+
+See the following example:
+
+\begin{enumerate}
+    \item $$A = \mb 2 & 4 \\ 3 & 4 \me, A^{-1} = \mb -1 & 1 \\ \frac{3}{4} & -\frac{1}{2} \me$$
+    \item $$\mb 2 & 4 \\ 3 & 4 \me \cdot \mb -1 \\ \frac{3}{4} \me = \mb 1 \\ 0 \me, \textrm{ and }\mb 2 & 4 \\ 3 & 4 \me \cdot \mb 1 \\ -\frac{1}{2}\me = \mb 0 \\ 1 \me$$
+\end{enumerate}
+
+Extrapolating Cramer's Rule, we see that\dots
+
+$$\{\textrm{entry } (i,j) \textrm{ of } A^{-1}\} = x_i = \frac{\det A_i(\bm{e_j})}{\det A}$$
+
+Remember $\det A_i (\bm{e}_j) = (-1)^{i + j} \det A_{j,i} = C_{j,i}$ where $C_{j,i}$ is a cofactor of $A$. Note that $A_{j,i}$ denotes the submatrix formed by eliminating row $j$ and column $i$.
+
+Thus the above could be rewritten $x_i = \frac{C_{j,i}}{\det A}$. \\ \\
+
+The source of the $j$ is the column from which the vector $\bm{x}$ is derived, which could then be used in place to specify that\dots
+
+$$x_i = \underbrace{(\bm{a^{-1}_j})_i}_{A^{-1}_{i,j}} = \frac{C_{j,i}}{\det A}$$
+
+As an example\dots
+\begin{enumerate}
+    \item If $A = \mb 2 & 4 \\ 3 & 4 \me$, then an $\bm{x}$ could be $\bm{a^{-1}_1}$, the first column of the inverse matrix.
+    \item Then $\bm{x}$ takes the form $\bm{x} = \mb x_1 \\ x_2 \me$ such that $x_1 = \frac{C_{1,1}}{\det A} = \frac{(-1)^{1+1} \cdot 4}{-4} = -1$.
+    \item Likewise, $x_2 = \frac{C_{1,2}}{\det A} = \frac{(-1)^{(1+2)} \cdot 3}{-4} = \frac{-3}{-4} = \frac{3}{4}$.
+    \item From that then, $\bm{x} \textrm{ (or $\bm{a^{-1}_1}$) } = \mb -1 \\ \frac{3}{4} \me$. \\ \\
+\end{enumerate}
+
+Therefore, because each individual component of the matrix could be written in terms of cofactors $C$ and a division of the determinant, an
+alternative formula for the inverse \emph{as a whole} can be derived.
+
+$$A^{-1} = \frac{1}{\det A} \cdot
+\underbrace{\mb
+C_{1,1} & \dots & C_{n,1} \\
+\vdots & \ddots & \vdots \\
+C_{1,n} & \dots & C_{n,n}
+\me}_{\textrm{adjugate/adjoint}}$$
+
+$$A^{-1} = \frac{1}{\det A}\adj{A} $$
+
+The \bt{adjugate} or \bt{adjoint matrix} is defined as the \emph{transpose} of \emph{specically \bt{the cofactor matrix}}. \\ \\
+
+Thus the above could be rewritten as $A^{-1} = \frac{1}{\det A} C^{T}$. \\ \\
+
+The matrix of cofactors would ordinarily be written as\dots
+
+$$
+\mb
+C_{1,1} & \dots & C_{1,n} \\
+\vdots & \ddots & \vdots \\
+C_{n,1} & \dots & C_{n,n}
+\me
+$$
+
+If $A$ is a matrix $2 \times 2$, then the area of its parallelogram defined by its columns is $|\det A|$. Likewise, if $A$ is
+$3 \times 3$, then the area of the parallelepiped defined by its columns is also $|\det A|$. \\ \\
+
+It is easy to intuit the sense of this in terms of a rectangle $R$ in which its matrix of coordinates is $\mb 5 & 0 \\ 0 & 10 \me$
+such that it its reaches out from the origin $5$ across the $x$-axis and $10$ across the $y$-axis. Then
+$\det R = 5 \cdot 10 - (0 \cdot 0) = 50$. \\ \\
+
+If two vectors $\bm{a}_1, \bm{a}_2$ do not equal 0, then for any scalar $c$, $\det [\bm{a_1 \; a_2}] = \det [\bm{a}_1 \; (\bm{a}_2 + c\bm{a}_1)]$.
+
+This is an extension of the property of determinants that the addition of a multiple of one row to another does not affect the determinant. Note a column vector is a row vector for a transpose, and tranposes maintain the same determinant. \\ \\
+
+Geometrically, this is because the distance of the base, defined by $\bm{0}$ and $\bm{a}_1$, and the height, defined by the parallel line that
+runs through $\bm{a_2}$ across the line formed by $\bm{0}, \bm{a}_1$ does not change when adding a scalar value of $\bm{a_1}$ to $\bm{a_2}$. \\ \\
+
+Note that translating (moving/shifting) a parallelogram does not change its area. \\ \\
+
+If $T$ is a linear transformation and $S$ is a set in the domain of $T$, then $T(S)$ is the set of images of points in $S$. \\ \\
+
+The area of $T(S)$ can be calculated so:
+
+$$\area{T(S)} = |\det A| \cdot \area{S}$$ 
+
+If $S = \{ \bm{b_1} + \bm{b_2} \}$, then\dots
+
+$$T(S) = T(\bm{b}_1 + \bm{b}_2) = $$
+$$T(\bm{b}_1) + T(\bm{b}_2) = $$
+$$T(S) = A\bm{b}_1 + A\bm{b}_2$$
+
+Where $A$ is the transformation matrix as in $T(\bm{x}) = A\bm{x}$. This can then be rewritten as the product of two matrices:
+
+$$T(S) = AB \textrm{ where } B = [\bm{b}_1 \; \bm{b}_2]$$
+
+Thus, the $\area{T(S)} = \area{AB} = |\det A| \cdot |\det B|$. \\ \\
+
+Following from the previous logic that the area of a parallelogram remains the same when one vector is modified by a a multiple of the other vector\dots
+
+$$\area{T(\bm{p} + S)} = \area{T(\bm{p})} + \area{T(S)} = \area{T(S)}$$
+
+Where $\bm{p}$ is a vector and $S$ is a parallelogram. Note that the area of a vector $= 0$. \\ \\
+
+\iffalse
+
+If $a, b$ are $\geq 0$, we can find the area of an ellipse whose equation is $\frac{x^2_1}{a} + \frac{x^2_2}{b} = 1$ by observing the
+transformation a circle undergoes.
+
+\begin{enumerate}
+    \item Because the circle is being stretched by $a$ in one direction and $b$ in the other (say, horizontally and vertically), its transformation matrix
+    can be written $A = \mb a & 0 \\ 0 & b \me$.
+    \item If some vector $\bm{u} = \mb u_1 \\ u_2 \me$ represents a vector within the circle undergoing transformation to our ellipse's
+    vector $\bm{x}$, then $\bm{x} = A\bm{u}$, and likewise\dots
+    \item $A^{-1}A\bm{u} = \bm{u} = A^{-1}\bm{x} = \mb \frac{1}{a} & 0 \\ 0 & \frac{1}{b} \me \mb x_1 \\ x_2 \me$.
+    \item This implies that $\bm{u} = \mb u_1 \\ u_2 \me = \mb \frac{x_1}{a} \\ \frac{x_2}{b} \me$, where $\bm{u}$ is our original vector from the circle.
+    \item Thus \bt{u} is in the unit circle with $u^2_1 + u^2_2 \leq 1$ if and only if $(\frac{x_1}{a})^2 + (\frac{x_2}{b})^2 \leq 1$.
+    \item Finally, the area of the ellipse can be said to be the area of $A$ times the area of the unit circle.
+    $$|\det A| \cdot \pi = ab \cdot \pi$$
+\end{enumerate}
+
+\fi
+
+\section*{Vector Spaces and Subspaces}
+
+A \bt{vector space} is a non-empty space \emph{V} of objects called \emph{vectors} that are defined
+by the two operations \emph{sum} and \emph{multiplication by real scalars (real numbers)}. \\ \\
+
+Vector spaces are subject to the following 10 rules valid for vectors $\bm{u, v, w}$ in \emph{V} and for all
+scalars $v,d$.
+
+\begin{enumerate}
+    \item $\bm{(u + v)} \in V$
+    \item $\bm{u + v = v + u}$
+    \item $\bm{(u + v) + w = u + (v + w)}$
+    \item $\exists \bm{0} \in V: \bm{u + 0 = u}$
+    \item $\forall \bm{u} \exists (\bm{-u}): \bm{u + (-u) = 0} \land \{\bm{u, -u}\} \in V$
+    \item $c \cdot \bm{u} = c\bm{u} \in V$
+    \item $c(\bm{u + v}) = c\bm{u} + c\bm{v}$
+    \item $(c + d)\bm{u} = c\bm{u} + d\bm{u}$
+    \item $c(d\bm{u}) = (cd)\bm{u}$
+    \item $1\bm{u} = \bm{u}$
+\end{enumerate}
+
+Note that for every \bt{u} in $V$ and scalar $c$\dots
+
+\begin{itemize}
+    \item $0\bm{u} = \bm{0}$
+    \item $c\bm{0} = \bm{0}$
+    \item $\bm{-u} = (-1)\bm{u}$
+\end{itemize}
+
+Examples of vector spaces are the set $\mathbb{S}$ of double-infinite series of numbers
+where we have, for example, $\{y_k\} = \{\dots, y_{-2}, y_{-1}, y_0, y_{1}, y_{2}, \dots \}$. \\ \\
+
+Likewise, another example is the set $\mathbb{P}_n$. The $n$ of the set $\mathbb{P}$ informs the maximal power of the polynomials.
+It includes all polynomials in the form of\dots
+
+$$\bm{p}(t) = a_0 + a_1t + \dots + a_n t^n$$
+
+Another example is the set of all defined real-value functions in $\mathbb{D}$. \\ \\
+
+A \bt{vector subspace} is an adequate subset of vectors of a larger vector space. In the case of subspaces, only three of the 10 axioms
+must be satisfied. \\ \\
+
+A \emph{subspace} of a \emph{vector space} $V$ is a subset $H$ of $V$ that has these properties:
+
+\begin{enumerate}
+    \item $\bm{0} \in H$
+    \item $H$ is closed under the sum of vectors. I.e., $\forall \bm{u}\forall \bm{v} \in H: \bm{(u + v) \in H}$.
+    \item $H$ is closed under the multiplication by scalars. I.e., $\forall c \forall \bm{u} \in H: c\bm{u} \in H$.
+\end{enumerate}
+
+The above properties guarantee that a subspace $H$ in $V$ is \emph{itself} a \emph{vector subspace}. \\ \\
+
+Every subspace is a vector space. Likewise, every vector space is a subspace. \\ \\
+
+The set that contains only the zero vector in the vector space $V$ is the \bt{zero subspace} and is written $\{\bm{0}\}$. \\ \\
+
+Note that $\PP$ is a subspace of all the real-value functions defined in $\R$ ($\mmb{D}$). Likewise, for every $n \geq 0$, $\PP_n$ is a subspace of $\PP$. \\ \\
+
+However, the vector space $\R^2$ is not a subset of the vector space $\R^3$ because
+$\R^2$ is not even a subset of $\R^3$. The set below\dots
+
+$$\left\{ \mb s \\ t \\ 0 \me : s, t \in \R \right\}$$
+
+\dots looks and acts like $\R^2$ but is logically distinct. All of the vectors of $\R^3$ have three entries and all
+of the vectors of $R^2$ have two entries. \\ \\
+
+Both a plane in $\R^3$ and a line in $\R^2$ that do not pass through the origin are not subspaces of
+their respective vector spaces. This is because they do not contain the \emph{zero vector} ($\bm{0}$). \\ \\
+
+Recall that the term \bt{linear combination} refers to any sum of scalar multiples of vectors, and $\gen{\bm{v}_1,\dots,\bm{v}_p}$ is the set of all vectors
+that can be written as linear combinations of $\bm{v}_1,\dots,\bm{v}_p$. \\ \\
+
+Every subspace of $\R^3$ that is distinct from $\R^3$ itself is represented by the generator $\gen{\bm{v}_1, \bm{v}_2}$
+and forms a plane that intersects the origin. If this subspace formed more than a plane, than it would form a hyperplane and encompass $\R^3$
+and thus not be a subset. \\
+
+If $\bm{v}_1,\dots,\bm{v}_p$ are in a vector space $V$, then their generator, $\gen{\bm{v}_1,\dots,\bm{v}_p}$ is a subspace of $V$
+known as a \bt{generated subspace} by $\bm{v}_1,\dots,\bm{v}_p$. \\ \\
+
+Given a subspace $H$ of $V$, a set generator for $H$ is a set ${\bm{v}_1,\dots,\bm{v}_p}$ in $H$ such that $H = \gen{\bm{v}_1,\dots,\bm{v}_p}$.
+
+Using the above, we can show that $H = \{(a-3b,b-a,a,b): a, b \in \R\}$ is a subspace of $\R^4$.
+First we place the set into vector form\dots
+    
+$$H = \mb a - 3b \\ b - a \\ a \\ b \me$$
+
+By factoring out $a$ and $b$, we can see that\dots
+
+$$H = a \underbrace{\mb 1 \\ -1 \\ 1 \\ 0 \me}_{\bm{v}_1} + b \underbrace{\mb -3 \\ 1 \\ 0 \\ 1 \me}_{\bm{v}_2}$$
+
+We are then left with a vector equation that can be simplified to $\gen{\bm{v}_1, \bm{v}_2}$. \\ \\
+
+We can test if a set $H$, defined as comprising all the points in $\R^2$ of the form $\vecbrac{3s, 2 + 5s}$, is a subspace like so\dots
+
+\begin{enumerate}
+    \item Note that every point in this set satisfies the equation $\bm{i} = 3s$ and $\bm{j} = 2 + 5s$.
+    \item To test if it closed under multiplication, we take any vector inside, such as where $s = 3$, which returns $\vecbrac{9,17}$.
+    \item Then we multiply by an arbitrary scalar integer, such as 2: $2\cdot\vecbrac{9,17} = \vecbrac{18, 34}$.
+    \item Then we test if the new vector still holds for the set's constraints\dots
+    $$3s = 18 \rightarrow s = 6$$
+    $$2 + 5s = 34 \rightarrow s = \frac{32}{5}$$
+    \item We can see that $6 \neq \frac{32}{5}$, and thus we know the set is not a subspace because it is not closed under mulitiplication.
+\end{enumerate}
+
+The \bt{null space} of $A_{m \times n}$ is a subspace of $\R^n$ because every valid null vector has $n$ entries. \\ \\
+
+Given $A$, then $A \cdot \bm{x}$, where \bt{x} is $n \times 1$, results in a $m \times 1$ column vector, usually denoted $\bm{b}$. \\ \\
+
+In the case of the null space, each $\bm{x}$ originating from within it results in $\bm{0}$ when multiplied by $A$. \\ \\
+
+The \bt{column space} of A is a subspace of $\R^m$ as each column vector of $A$, $\bm{a_c}$, has $m$ entries. \\ \\
+
+The column space, which is a subspace of $\R^m$, is equal to the entire space of $\R^m$ if and only if $A\bm{x}=\bm{b}$ has a solution
+for every $\bm{b} \in \R^m$. \\ \\
+
+Linear transformations follow the same rules in vector spaces, where $\bm{x} \in V \rightarrow T(\bm{x}) \in W$, such that\dots
+
+\begin{itemize}
+    \item $T(\bm{u + v}) = T(\bm{u}) + T(\bm{v})$
+    \item $T(c\bm{u}) = cT(\bm{u})$
+\end{itemize}
+
+The \emph{null space} of a transformation is also known as the \bt{nucleus}. \\ \\
+
+The \bt{range} of a transformation $T: V \rightarrow W$ is all the vectors of the form $T(\bm{x})$ for some $\bm{x} \in V$. \\ \\
+
+Being that $T(\bm{x})$ can be modeled by $A\bm{x}$ for some matrix $A$, the nucleus and the image of $T$ are simply
+the null space and column space of $A$.
+
+\section*{Bases}
+
+Recall that an indexed set of vectors $\{\bm{v}_1,\dots,\bm{v}_p\}$ is linearly independent only if the only solution to $\bm{0}$ is trivial. \\ \\
+
+It is linearly dependent is there is a non-trivial solution. In that case, there is a \bt{relation of linear dependence} between $\bm{v}_1,\dots,\bm{v}_p$. \\ \\
+
+See that $\{t, \sin t, \cos 2t, \sin t \cos t\}$ is an example of a linearly independent set of functions defined in $\R$.
+
+\begin{enumerate}
+    \item This is to say that for all $t$, there is no linear combination of weights to make the equation, $c_1\bm{v_1} + \dots + c_p\bm{v_p} = \bm{0}$, valid.
+    \item See that for $t = 0$, $a\cdot t + b\cdot \sin t + c\cdot \cos 2t + d\cdot \sin t \cos t = \bm{0}$ becomes\dots
+    $$a\cdot 0 + b\cdot 0 + c\cdot 1 + d\cdot 0 = \bm{0} \rightarrow c = 0$$
+    \item As $c$ is equal to 0, we have found our required weight of $c$ (for one value of $t$) that could lead to a non-trivial linear combination.
+    \item We can now substitute that $c = 0$ in to simplify our equation, effectively ignoring its associated function:
+    $$a\cdot t + b\cdot \sin t + d\cdot \sin t \cos t = \bm{0}$$
+    \item By setting $t = 2\pi$, we find $a\cdot 2\pi + b\cdot 0 + d\cdot 0 = \bm{0} \rightarrow a = 0$
+    \item Continuning with $ b\cdot \sin t + d\cdot \sin t \cos t = \bm{0}$, when $t = \frac{\pi}{2}$, we find that  $b\cdot 1 + d\cdot 0 \ = \bm{0} \rightarrow b = 0$.
+    \item For $t = \frac{\pi}{4}$, we see $d \cdot (\frac{\sqrt{2}}{2})^2 = \bm{0} \rightarrow d = 0$.
+    \item Thus, although we have not explored all values of $t$, in the few we have explored, we have already determined that a combination of all $0$'s is required to satisfy
+    the homogeneous equation, and therefore it is impossible that there exists a non-trivial solution for all of $t$ (i.e., even more values of $t$).
+\end{enumerate}
+
+An indexed set of two or more vectors, with $\bm{v_1} \neq 0$, is linearly dependent if there exists some $\bm{v_j}$, where $j > 1$, that is a linear combination
+of the vectors before it. \\ \\
+
+If $H$ is a vector subspace of $V$, a set of indexed vectors $\mathcal{B} = \{\bm{b_1},\dots,\bm{b_p}\}$ in $V$ is a \bt{base} of $H$ if\dots
+
+\begin{enumerate}
+    \item $\mathcal{B}$ is  a linearly independent set.
+    \item The subspace generated by $\mathcal{B}$ is equal to $H$, which is to say\dots
+    $$H = \gen{\bm{b_1,\dots,b_p}}$$
+\end{enumerate}
+
+If $S$ is a set such that $S = \{\bm{v_1,\dots,v_p}\} \in H$ y $H = \gen{\bm{v_1,\dots,v_p}}$, then\dots
+
+\begin{itemize}
+    \item If one of the vectores of $S$, $\bm{v_c}$, is a linear combination of the remaining vectors in $S$, then the set formed by $S$
+    upon eliminating that vector $\bm{v_c}$ still forms $H$.
+    \item If $H \neq {\bm{0}}$, some subset of $S$ is a base for $H$. In other words, every set that is not comprised of only the zero vector has a base.
+\end{itemize}
+
+If $\mathcal{B} = \{\bm{b_1},\dots,\bm{b_n}\}$ is a base for a vector space $V$, $\forall \bm{x} \in V$, there exists a unique set of scalars
+$\{c_1,\dots,c_n\}$ such that $\bm{x} = c_1\bm{b_1} + \dots + c_n\bm{b_n}$.
+
+In other words, there exists only one solution to every \bt{x} for the given base. \\ \\
+
+This equation,  $\bm{x} = c_1\bm{b_1} + \dots + c_n\bm{b_n}$, is known as \bt{the coordinates of} $\bm{x}$ \bt{with respect to the base} $\bm{\mmc{B}}$
+(otherwise known as the $\bm{\mmc{B}}$\bt{-coordinates of x}).
+
+It can be denoted as the following vector:
+
+$$[\bm{x}]_{\mmc{B}} = \mb c_1 \\ \vdots \\ c_n \me$$
+
+The vector is the \bt{vector of \emph{x}-coordinates with respect to} $\bm{\mmc{B}}$, also known as the \bt{vector of} $\bm{\mmc{B}}$ \bt{of \emph{x}}. \\ \\
+
+Note that $\bm{x} \rightarrowtail [\bm{x}]_\mmc{B}$ is a coordinate transformation determined by $\bm{\mmc{B}}$. \\ \\
+
+If $[\bm{x}]_\mmc{B} = \mb 3 \\ 1 \me$, this implies $\bm{x} = 3\bm{b_1} + 1\bm{b_2}$. \\ \\
+
+See that $[\bm{x}]_\mmc{B}$ describes the way to reach some universal vector $\bm{x}$ in terms of $\mmc{B}$. \\ \\
+
+Implicitly, every \bt{x} prior informed how to reach \bt{x} in terms of the expected standard base. Thus prior \bt{x}'s could be written $[\bm{x}]_\mmc{E}$.
+
+And in that regard, $\mmc{E} = \set{\bm{e_1, e_2}}$ for $\R^2$ where $\bm{e_1} = \mb 1 \\ 0 \me, \bm{e_2} = \mb 0 \\ 1 \me$. \\ \\
+
+$\bm{P_\mmc{B}}$ is called a \bt{matrix of change of coordinates \emph{of}} $\bm{\mmc{B}}$ to the standard base in $\R^n$. Where $\mmc{B} = \set{\bm{b_1},\dots,\bm{b_n}}$, $P_\mmc{B} = [\bm{b_1} \dots \bm{b_n}]$.
+$P_\mmc{B}$ is the matrix of the base. When this \emph{matrix of change of coordinates} transforms a vector in its respective language, such as $P_\mmc{B}[\bm{x}]_\mmc{B}$, the vector is terms of the standard base is found.
+
+$$P_\mmc{B}[\bm{x}]_\mmc{B} = \bm{x}$$
+
+This thus implies that $P_\mmc{B}^{-1}\bm{x} = [\bm{x}]_\mmc{B}$. \\ \\
+
+If $\mmc{B} = \set{\bm{b_1},\dots,\bm{b_n}}$ is a base for a vector space $V$, then it the transformation $\bm{x} \rightarrowtail [\bm{x}]_\mmc{B}$ is one-to-one from $V$ to $\R^n$. \\ \\
+
+The linearity of the transformation of coordinates extends to linear combinations as well. If $\bm{u_1}, \dots, \bm{u_p}$ are in $V$ and $c_1, \dots, c_p$ are scalars, then\dots
+
+$$\underbrace{[c_1\bm{u_1} + \dots + c_p\bm{u_p}]_\mmc{B}}_{\textrm{vector in $\mmc{B}$-coordinates}} = c_1[\bm{u_1}]_\mmc{B} + \dots + c_p[\bm{u_p}]_\mmc{B}$$
+
+This is to say that a linear combination of vectors and scalars (resulting in a single vector) in $\mmc{B}$-coordinates is the same as the
+linear combination of those vectors indiviudally in $\mmc{B}$-coordinates with the scalars outside. \\ \\
+
+\section*{The Dimension of a Vector Space}
+
+If a vector space $V$ has the base $\mmc{B} = \set{\bm{b_1\dots b_n}}$, then any set in $V$ that has more than $n$ vectors \emph{must be linearly dependent}. \\ \\
+
+If a vector space $V$ has a base of $n$ vectors, then every base of $V$ must consist of exactly $n$ vectors. If there were more, then as above, there would be extraneous vectors;
+if there were fewer, then the entire space of $V$ could not be generated and a base could not be formed. \\ \\
+
+\begin{itemize}
+    \item If $V$ is generated by a finite set, then it has \bt{finite dimension} and the dimension, $\dim V$, is the number of vectors in a base for $V$.
+    \item If $V$ is not generated by a finite set, then $V$ has \bt{infinite dimension}.
+    \item If a vector space is defined by $\set{\bm{0}}$, then it has $0$ dimension.
+\end{itemize}
+
+If $V$ is a vector space of dimension $p$ where $p \geq 1$, then any linearly independent set
+of exactly $p$ elements in $V$ is automatically a base for $V$. \\ \\
+
+If $A$ is $m \times n$, then every row of $A$ has $n$ entries such that each row is a vector in $\R^n$. \\ \\
+
+The set of all linear combinations of the row vectors is known as the \bt{row space} and is denoted, in Spanish, $\textrm{Fila}\,A$. \\ \\
+
+As every row has $n$ entries, the \emph{row space} is a subspace of $\R^n$. \\ \\
+
+As the rows of a matrix $A$ are equivalent to the columns of $A^T$, the column space of $A^T$ is equivalent to the row space of $A$.
+
+$$\textrm{Col}\,A^T \equiv \textrm{Fila}\,A$$
+
+If two matrices $A$ and $B$ are row-equivalent, then their row spaces are equal. \\ \\
+
+If $B$ is in staircase form, the rows of $B$ different from $\bm{0}$ form a base for the row space of both $A$ and $B$.
+
+Note, although $A$ and $B$ share the same row space generators, they \emph{do not} share the same column space generators. \\ \\
+
+Note that the \bt{range} of $A$ is the \emph{dimension} of the column space of $A$. \\ \\
+
+Be aware that the range and dimension are not equivalent to subspace's $n$ or $m$ as seen in $\R^n$ or $\R^m$.
+
+The columns could be a subspace of $\R^{10}$ and yet $A$ could still have a range and dimensionality of $1$. \\ \\
+
+Dimensionality is always $\leq \min(m,n)$ and describes how greatly matrices can describe the spaces their vectors inhabit. \\ \\
+
+The dimensions of the column space and row space of a matrix $A_{m\times n}$ are equal. This common dimension, the \emph{range} of A, is
+also equal to the number of \emph{pivot positions} in $A$. Therefore\dots
+
+$$\textrm{range}\, A + \dim \textrm{Nul}\, A = n$$
+
+The above equivalently says that the number of pivot positions and non-pivot positions is equal to the total number of columns. \\ \\
+
+Additionally, more rules arise regarding an invertible matrix $A_{n \times n}$:
+
+\begin{enumerate}
+    \item The columns of $A$ form a base of $\R^n$.
+    \item $\textrm{Col}\, A = \R^n$
+    \item $\dim \textrm{Col}\, A = n$
+    \item $\textrm{range}\, A = n$
+    \item $\textrm{Nul}\, A = \set{\bm{0}}$
+    \item $\dim \textrm{Nul}\, A = 0$
+\end{enumerate}
+
+Note that the dimension of a space is calculated as the number of linearly independent vectors that form it.
+
+\section*{Change of Base}
+
+If $\mmc{B} = \set{\bm{b_1},\dots,\bm{b_n}}$ and $\mmc{C} = \set{\bm{c_1,\dots,c_n}}$ are both valid
+bases for a vector space $V$, then there exists a matrix $P_{\mmc{C} \leftarrow \mmc{B}}$ of $n \times n$ such that\dots
+
+$$[\bm{x}]_\mmc{C} = P_{\mmc{C} \leftarrow \mmc{B}}[\bm{x}]_{\mmc{B}}$$
+
+This is to say that there exists some matrix that converts vectors
+encoded in $\mmc{B}$ to vectors encoded in $\mmc{C}$. \\ \\
+
+The columns of $P_{\mmc{C} \leftarrow \mmc{B}}$ are the vectors of base $\mmc{B}$ encoded in $\mmc{C}$.
+
+$$P_{\mmc{C} \leftarrow \mmc{B}} = [[\bm{b_1}]_\mmc{C} \dots [\bm{b_n}]_\mmc{C}]$$
+
+Thus, the following holds:
+
+\begin{align*}
+    & [\bm{b_1}]_\mmc{C} = \mb a_1 \\ a_2 \me
+    & [\bm{b_2}]_\mmc{C} = \mb b_1 \\ b_2 \me 
+\end{align*}
+
+And thus too we can see:
+
+\begin{align*}
+    & [\bm{c_1 \, c_2}] \mb a_1 \\ a_2 \me = \bm{b_1}
+    & [\bm{c_1 \, c_2}] \mb b_1 \\ b_2 \me = \bm{b_2}
+\end{align*}
+
+Because the above are linear systems which can be solved through row reduction of
+$[\bm{c_1 \, c_2}]$, we can solve for both columns simultaneously:
+
+$$[\bm{c_1 \, c_2 | b_1 \, b_2}] \sim [I | P_{\mmc{C \leftarrow B}}]$$
+
+The above is the formula for finding the change-of-base matrix and
+generalizes to larger matrices than $2 \times 2$. \\ \\
+
+Likewise as $P_{\mmc{C} \leftarrow \mmc{B}}$ translates from $\mmc{B}$ to $\mmc{C}$, there exists a matrix to
+convert from $\mmc{C}$ back to $\mmc{B}$\dots
+
+$$(P_{\mmc{C} \leftarrow \mmc{B}})^{-1} = P_{\mmc{B} \leftarrow \mmc{C}}$$
+$$(P_{\mmc{C} \leftarrow \mmc{B}})^{-1}[\bm{x}]_\mmc{C} = [\bm{x}]_\mmc{B}$$
+
+If there exists both $\mmc{B} = \set{\bm{b_1,\dots,b_n}}$ and the \emph{standard base} $\mmc{E} = \set{\bm{e_1,\dots,e_n}}$ and both are in $\R^n$,
+then $[\bm{b_1}]_{\mmc{E}} = \bm{b_1}$. The same applies for other vectors in $\mmc{B}$. As a result, $P_{\mmc{E} \leftarrow \mmc{B}} = P_\mmc{B}$. \\ \\
+
+For every $\bm{x}$ in $\R^n$ where $\mmc{B}, \mmc{C}$ are valid bases\dots
+
+\begin{itemize}
+    \item $P_\mmc{B}[\bm{x}]_\mmc{B} = P_\mmc{E  \leftarrow B}[\bm{x}]_\mmc{B} = \bm{x}$
+    \item $P_\mmc{C}[\bm{x}]_\mmc{C} = P_\mmc{E \leftarrow C}[\bm{x}]_\mmc{C} = \bm{x}$
+    \item $P_\mmc{C}^{-1}\bm{x} = P_\mmc{E \leftarrow C}^{-1}\bm{x} = P_\mmc{C \leftarrow E}\bm{x} = [\bm{x}]_\mmc{C}$
+    \item $[\bm{x}]_\mmc{C} = P_\mmc{C}^{-1}\bm{x} = P_\mmc{C}^{-1}P_\mmc{B}[\bm{x}]_\mmc{B}$
+\end{itemize}
+
+\section*{Eigenvectors and Eigenvalues}
+
+An \bt{eigenvector} is defined as a vector $\bm{x}$ for which some matrix $A$,
+the multiplication $A\bm{x}$ is equal to $\lambda \bm{x}$.
+
+Essentially, it is a vector which is stretched by $A$. \\ \\
+
+If $A\bm{x}$ does not result in a scalar value of $\bm{x}$, \bt{x} is
+not an eigenvector for the given matrix $A$. \\ \\
+
+An \bt{eigenvalue} of $A$ is a value $\lambda$ that exists for some
+given matrix $A$. In the case that $A\bm{x} = 2\bm{x}$, $2$ is an eigenvalue. \\ \\
+
+To test if an eigenvalue exists, then the following equations are used:
+
+\begin{align*}
+    & A\bm{x} = \lambda\bm{x} \\
+    & A\bm{x} - \lambda\bm{x} = \bm{0} \\
+    & (A - \lambda I)\bm{x} = \bm{0}
+\end{align*}
+
+$$ A - \lambda I =
+\mb a_{1,1} & \dots & a_{1,n} \\
+\vdots & \ddots & \vdots \\
+a_{n,1} & \dots & a_{n,n} \me - \mb
+\lambda & 0 & 0 \\
+0 & \ddots & 0 \\
+0 & 0 & \lambda \me =
+\mb (a_{1,1} - \lambda) & \dots & a_{1,n} \\
+\vdots & \ddots & \vdots \\
+a_{n,1} & \dots & (a_{n,n} - \lambda) \me
+$$
+
+The resulting matrix should be linearly dependent if $\lambda$ is a
+valid eigenvalue. \\ \\
+
+Note that while row-reducing the above matrix and finding its null space
+will provide a base for any associated eigenvectors to the given $\lambda$,
+it will not provide eigenvalues. \\ \\
+
+The eigenvalues of a triangular matrix are trivially easy to find as
+they are the entries along its principal diagonal. \\ \\
+
+If $A$ has a eigenvalue of $0$, then $A\bm{x} = 0\bm{x} = \bm{0}$ has a nontrivial
+solution (and therefore the null space is greater than $\set{\bm{0}}$), this indicates that the matrix $A$ is not invertible. \\ \\
+
+If $\bm{v_1 \dots v_n}$ are eigenvectors that correspond to distinct
+eigenvalues $\lambda_1 \dots \lambda_n$, then the set $\set{\bm{v_1 \dots v_n}}$
+is linearly independent. \\ \\
+
+Finding all the possible eigenvalues of a matrix $A$ is equivalent to
+finding all $\lambda$ in the equation $(A - \lambda I)\bm{x}$ for which
+the matrix is linearly dependent, which is to say for which the determinant is equal to $0$. \\ \\
+
+This can be done by simply taking the determinant and factoring
+the resultant equation:
+
+$$\det(A - \lambda I) = 0$$
+
+Remember that the determinant of $A$ is equivalent to the product of its
+pivots in upper-staircase form $U$ multiplied by $(-1)^r$ where $r$ is
+the number of row interchanges, but only if $\exists A^{-1}$.
+
+$$\det A = \det U \textrm{ where } \exists A^{-1} = [(u_{1,1})(u_{2,2}) \dots (u_{n,n})] \cdot (-1)^r$$
+
+Additional rules are provided for the invertible matrix where $A$ is
+$n \times n$ and invertible:
+
+\begin{enumerate}
+    \item $0 \notin \set{\lambda_1\, \dots\,\lambda_n}$ for $A$.
+    \item $\det A \neq 0$.
+\end{enumerate}
+
+The determinant of a $3 \times 3$ matrix in $\R^3$ is the volume of the
+paralellepiped formed by its three column vectors. If any of the vectors
+is linearly dependent, the volume is $0$. Thus, geometrically, a plane of any size has
+no volume, and a line of any size has no area. \\ \\
+
+Two matrices $A, B$ are \bt{similar} if the following equations are
+possible to be satisfied:
+
+\begin{align*}
+    & PAP^{-1} = B \\
+    & P^{-1}BP = A
+\end{align*}
+
+Similar matrices have the same \emph{characteristic polynomial} (the
+$\lambda$ equation found after simplifying the determinant of the
+\emph{characteristic equation} ($A - \lambda I$)) and thus same eigenvalues.
+See the below proof:
+
+\begin{enumerate}
+    \item $B \sim A \rightarrow B = P^{-1}AP$
+    \item To find the characteristic equation for $B$, we find $\det(B - \lambda I)$.
+    \item From the above we can rewrite it: $(\underbrace{P^{-1}AP}_{B})
+    - \lambda (\underbrace{P^{-1}P}_{I}$).
+    \item Because $\lambda$ is a constant, we can rearrange it and then factor:
+    $$P^{-1}AP - P^{-1} \lambda P =$$
+    $$P^{-1}(AP - \lambda P)$$
+    $$P^{-1}(A - \lambda)P$$
+    \item From this, we may take the determinant to see:
+    $$\det (P^{-1}(A - \lambda)P) =$$
+    $$\det P^{-1} \cdot \det (A - \lambda) \cdot \det P =$$
+    $$\det P \cdot \det P^{-1} \cdot \det (A - \lambda) \cdot =$$
+    $$\det (A - \lambda) \rightarrow$$
+    $$\det (A - \lambda) = \det (B - \lambda)$$
+\end{enumerate}
+
+Note that matrices have have the same eigenvalues and yet not be similar. \\ \\
+
+Also note that similarity is \emph{not} the same as row-equivalence. \\ \\
+
+For calculating eigenvalues, you will often need to use the quadratic formula:
+
+$$\lambda = \frac{1}{2a}[-b \pm \sqrt{b^2 - 4ac}]$$
+
+\section*{Diagonalization}
+
+A matrix is \bt{diagonalizable} if it can be factored to take the form
+$A = PDP^{-1}$ where $D$ is a diagonal matrix. \\ \\
+
+For $k \geq 1$\dots
+
+$$D^k = \mb (d_{1,1})^{k} & \dots & 0 \\ 
+\vdots & \ddots & \vdots \\ 
+0 & \dots & (d_{n,n})^k \me$$
+
+$$A^k = PD^k P^{-1}$$
+
+A matrix $A_{n \times n}$ is diagonalizable if and only if $A$ has $n$
+linearly independent eigenvectors which can be used to compose $P$. \\ \\
+
+In the case which there are sufficient eigenvectors, eigenvalues are used
+to form the diagonal in $D$. If $\delta$ represents an eigenvector,
+then we have:
+
+$$PD = [\lambda_1 \bm{\delta_1} \; \lambda_2 \bm{\delta_2} \dots \lambda_n \bm{\delta_n}]$$
+
+Remember that $AB = [A\bm{b_1} \dots A\bm{b_n}]$. Because the columns
+of $D$ apart from each unique $\lambda_c$ are comprised of $0$'s, $PD$'s
+$P\bm{d_c}$'s ultimately resolve to $\bm{p_c} \lambda_c = \lambda_c \bm{\delta_c}$. \\ \\
+
+The steps to diagonalize a matrix are as follows:
+
+\begin{enumerate}
+    \item Determine the eigenvalues of $A_{n\times n}$ via $\det(A - \lambda I)$.
+    \item Find $n$ linearly independent eigenvectors by finding the null spaces
+    of $A$ (with the discovered eigenvalues) via $A - \lambda I = \bm{0}$.
+    \item Construct $P = [\delta_1 \dots \delta_n]$ using the eigenvectors found above.
+    \item Construct $D$ using the $\lambda$'s in the respective order of $P$'s associated eigenvectors.
+    (\emph{This is to say that if $\lambda_1$ was used to find eigenvector $\bm{\delta_1}$ and $\bm{\delta_1}$ was placed in column $10$ of $P$,
+    then $\lambda_1$ must be placed in column $10$ of $D$.})
+    \item Check that $AP = PD$ and that $P$ is invertible by calculating $P^{-1}$.
+\end{enumerate}
+
+A $n \times n$ matrix of $n$ \bt{distinct} eigenvalues is \emph{always} diagonalizable. \\ \\
+
+Note the following:
+
+\begin{itemize}
+    \item The dimension of the eigenspace (also known as the \bt{geometric mulitiplicity}) for every $\lambda$ of a matrix
+    is less than or equal to the algebraic multiplicity of $\lambda$.
+    \item A $n \times n$ matrix is diagonalizable if and only if the sum of the dimensions
+    of the eigenspaces (the sum of its geometric multiplicities) is equal to $n$.
+    \item The above only occurs when the characteristic polynomial completely factorizes to \emph{linear factors}
+    (factors of the form $ax + b$) and the dimension of the eigenspace for
+    $\lambda$ is equal to the algebraic multiplicity of $\lambda$.
+    \item If the above is true and the given matrix is diagonalizable, then
+    every base of each $\lambda$-associated eigenspace together form a base
+    of eigenvectors in $\R^n$ for the given matrix.
+\end{itemize}
+
+\section*{Eigenvectors and Linear Transformations}
+
+If $V \in \R^n$ and $W \in \R^m$, and we have the transformation $T: V \rightarrow W$, then to associate a matrix with
+the transformation $T$, bases $\mmc{B, C}$ are selected for $V, W$ (respectively) such that for any vector $\bm{x} \in V$,
+$[\bm{x}]_\mmc{B} \in \R^n$ y $[T(\bm{x})]_\mmc{C} \in \R^m$. \\ \\
+
+This is to say that for a vector in $V$, there is that same vector in $\mmc{B}$-coordinates in $\R^n$ and there is the same \emph{transformed}
+vector in $\mmc{C}$-coordinates in $\R^m$. \\ \\
+
+Note that $\set{\bm{b_1 \dots b_n}} = \mmc{B}$. This implies that $\bm{x}$ is defined as some linear combination of the base $\mmc{B}$ such that $\bm{x} = r_1\bm{b_1} + \dots + r_n\bm{b_n}$. See that\dots
+
+$$\bm{x} = r_1\bm{b_1} + \dots + r_n\bm{b_n} = [\bm{b_1 \dots b_n}] \vecbrac{r_1 \dots r_n}^T = \underbrace{P_\mmc{E \leftarrow B}}_{P_\mmc{B}} \underbrace{\mb r_1 \\ \vdots \\ r_n \me}_{\bm{[x]}_\mmc{B}} = \bm{x}$$
+
+And so from the above equation, we see that\dots
+
+$$[\bm{x}]_\mmc{B} = \mb r_1 \\ \vdots \\ r_n \me$$
+
+(\emph{The reason the scalars are represented with $r$ instead of $c$ is arbitrary but meant to avoid confusion with base $\mmc{C}$.}) \\ \\
+
+Therefore, then\dots
+
+$$T(\bm{x}) = T(r_1\bm{b_1} + \dots + r_n\bm{b_n}) =$$
+$$T(r_1\bm{b_1}) + \dots + T(r_n\bm{b_n}) =$$
+$$r_1T(\bm{b_1}) + \dots + r_nT(\bm{b_n})$$
+
+This implies that\dots
+
+$$\underbrace{[T(\bm{x})]_\mmc{E \leftarrow C}}_{\textrm{column vector}} = [T(\bm{x})]_\mmc{C} = r_1[T(\bm{b_1})]_\mmc{C} + \dots + r_n[T(\bm{b_n})]_\mmc{C}$$
+
+Because $r_c$ are scalars and $[T(\bm{b_c})]_\mmc{C}$ are column vectors, we can create matrix $M$ and a valid multiplication between
+the matrix $M$ and our vector $[\bm{x}]$ of scalars $r_c$ such that:
+
+$$[T(\bm{x})]_\mmc{C} = M[\bm{x}]_\mmc{B} \textrm{ where } M = [[T(\bm{b_1})]_\mmc{C} \dots [T(\bm{b_n})]_\mmc{C}]$$
+
+The above matrix $M$ is called \bt{the matrix for $T$ with respect to bases $\mmc{B, C}$}. It is composed of the base vectors of $\mmc{B}$ transformed and written
+in $\mmc{C}$-coordinates. \\ \\
+
+In the case where $\mmc{B, C}$ share the same space $V$ and $T$ is an identity transformation
+$T(\bm{x}) = \bm{x}$ (this is to say that the vector remains itself; it identifies the same point in space),
+then $M$ is actually just a matrix of change of coordinates. \\ \\
+
+When $W$ is equal to $V$ and $\mmc{C}$ coincides with $\mmc{B}$, $M$ is the \bt{matrix for $T$ with respect to $\mmc{B}$},
+or simply the \bt{$\mmc{B}$-matrix for $T$}, which is denoted $[T]_\mmc{B}$.
+
+$$\forall \bm{x} \in V \textrm{ where } T: V \rightarrow V: [T(\bm{x})]_\mmc{B} = [T]_\mmc{B}[\bm{x}]_\mmc{B}$$
+
+So in the above case, what differs is that $M$ is replaced by $[T]_\mmc{B}$. Essentially,
+the equation defines the transformation of \bt{x} through $T$ in $\mmc{B}$-coordinates as the transformation
+matrix in $\mmc{B}$-coordinates multiplying the \bt{x} vector also in $\mmc{B}$-coordinates. \\ \\
+
+If $A = PDP^{-1}$ (where $D$ is a diagonal $n \times n$ matrix) and if $\mmc{B}$ is a base for $\R^n$
+formed by the columns of $P$, then $D$ is the $\mmc{B}$-matrix for the transformation $\bm{x} \rightarrowtail A\bm{x}$. \\ \\
+
+To see this, let $\mmc{B} = \set{\bm{b_1 \dots b_n}}$ and $P = [\bm{b_1 \dots b_n}]$. Then $P$ is the matrix of change of coordinates
+$P_\mmc{B}$, and thus we see that $P[\bm{x}]_\mmc{B} = \bm{x}$ and $[\bm{x}]_\mmc{B} = P^{-1}\bm{x}$.
+
+
+If $T(\bm{x}) = A\bm{x}$ for $\bm{x} \in \R^n$, then\dots
+
+\begin{align*}
+    [T]_\mmc{B} =
+    & [[T(\bm{b_1})]_\mmc{B}\; \dots\; [T(\bm{b_n})]_\mmc{B}] =  \\
+    & [\underbrace{[A\bm{b_1}]_\mmc{B}\; \dots\; [A\bm{b_n}]_\mmc{B}}_{\textrm{definition of $T(\bm{x})$}}] = \\
+    & [P^{-1}A\bm{b_1}\; \dots\; P^{-1}A\bm{b_n}] = \\
+    & P^{-1}{A[\bm{b_1}\; \dots\; \bm{b_n}]} = \\
+    & P^{-1}AP
+\end{align*}
+
+Given that $A = PDP^{-1}$, we see:
+
+$$[T]_\mmc{B} = P^{-1}AP = P^{-1}PDP^{-1}P = IDI = D$$
+
+Because the above does not rely on $D$ being diagonal, it means that for
+any similar matrix $C$ such that $A = PCP^{-1}$, $C$ is the $\mmc{B}$-matrix
+for the transformation $\bm{x} \rightarrowtail A\bm{x}$ where the $\mmc{B}$-matrix is formed
+by the columns of $P$ ($P_{\mmc{E \leftarrow B}}$). \\ \\
+
+\section*{Complex Eigenvalues}
+
+A $n \times n$ matrix always indicates a characteristic polynomial of grade $n$ with $n$ roots
+when counting multiplicities \emph{and} when allowing \emph{complex} roots. \\ \\
+
+A complex root is signified when, through manual factoring or typically the quadratic formula,
+the square root of some negative integer is involved.
+
+E.g., $\lambda = \frac{1}{c_3}[c_1 \pm \sqrt{-c_2}]$. \\ \\
+
+
+\begin{itemize}
+    \item The imaginary number $\bm{i}$ represents $\sqrt{-1}$. Note that $i^2 = -1 \neq 1$. This is because the rule $\sqrt{a}\sqrt{b} = \sqrt{ab}$ does not hold when both $a, b < 0$.
+    \item Also note that any number $n$ where $0 \neq n \neq 1$ can be separated from the invisible $-1$ in $\sqrt{-n} = \sqrt{n(-1)}$.
+    \item If $n = 64$ in the case of $\sqrt{-64}$, then we have $\sqrt{64(-1)} = \sqrt{64}\sqrt{-1} = 8\sqrt{-1} = 8i$.
+\end{itemize}
+
+The same process of finding the eigenvalues and then subtracting them from
+$A$ to find the eigenvectors is used but with a slight modification. Instead of
+the use of row-reduction, a choice of how to assign one of the varibles $x_1$ determines
+how to assign the other (in the case of $2 \times 2$ matrices). \\ \\
+
+A system of equations such as the following may commonly occur:
+
+$$(-0.3 + 0.6i)x_1 - (0.6)x_2 = 0$$
+$$(0.75)x_1 + (0.3 + 0.6i)x_2 = 0$$
+
+In such a case, it is correct to select an $x_1$ or $x_2$ that makes the system easier, such as $x_2 = 5$. Once one value is selected, the other inherently follows.
+Note that the solutions to $x_1$ and $x_2$ become the values in the complex vector $\bm{v} = \mb x_1 \\ x_2 \me$. \\ \\
+
+A \bt{complex conjugate} $\overline{z}$ of a complex number $z$ is defined as that same number $z$ with its imaginary component sign-flipped. \\ \\
+
+Should $z = a + bi$, $\overline{z} = a - bi$. The product of a complex number $a \pm bi$ and its conjugate is the real number
+$(a - bi)(a + bi) = a^2 - b^2(i^2) = a^2 - b^2(-1) = a^2 + b^2$. \\ \\
+
+Note the following properties where the overline (as seen in $\overline{\bm{z}}$) indicates an element that has had its complex entries changed to their conjugates:
+
+\begin{align*}
+    & \overline{r\bm{x}} = \overline{r}\,\overline{\bm{x}} \\
+    & \overline{B\bm{x}} = \overline{B}\,\overline{\bm{x}} \\
+    & \overline{BC} = \overline{B}\,\overline{C} \\
+    & \overline{rB} = \overline{r}\,\overline{B}
+\end{align*}
+
+And if $A_{n \times n}$ is a matrix with real values, then $\overline{A\bm{x}} = \overline{A}\overline{\bm{x}} = A\overline{\bm{x}}$.
+If $\lambda$ is an eigenvalue of $A$ and $\bm{\overline{x}}$ is its corresponding eigenvector in $\mmb{C}^n$, then:
+
+$$A\overline{\bm{x}} = \overline{A\bm{x}} = \overline{\lambda\bm{x}} = \overline{\lambda}\overline{\bm{x}}$$
+
+This is to say that whenever $A \in \R$, any of its complex eigenvectors and eigenvalues present themselves in pairs. \\ \\
+
+If $C = \mb a & -b \\ b & a \me$ with $a, b \in \R$, then:
+
+\begin{enumerate}
+    \item The eigenvalues of $C$ are $\lambda = a \pm bi$.
+    \item $r = |\lambda| = \sqrt{a^2 + b^2}$
+    \item $C = r \mb a/r & -b/r \\ b/r & a/r \me = \mb r & 0 \\ 0 & r \me \mb \cos\phi & -\sin\phi \\ \sin\phi & \cos\phi \me = \mb r\cos\phi & -r\sin\phi \\ r\sin\phi & r\cos\phi \me$
+\end{enumerate}
+
+
+A factorization for $A = PCP^{-1}$, where $\lambda = a - bi$, $b \neq 0$, and $\bm{v}$ is an eigenvector in $\mmb{C}^2$, has the folllowing definitions:
+
+$$P = [\textrm{Re}(\bm{v})\; \textrm{Im}(\bm{v})],\; C = \mb a & -b \\ b & a\me$$
+
+They can be used in combination with the above properties to discover the angle $\phi$ that describes the rotation of a transformation.
+
+\section*{Dot Product, Length, and Orthogonality}
+
+The \bt{dot product}, also known as the \bt{scalar product} and
+\bt{inner product}, of two matrices \bt{u, v} is the sum of the products
+of their correspondingly indexed components. \\ \\
+
+It can be defined so:
+
+$$\bm{u \cdot v} = \bm{u^T v} = \mb u_1 & \dots & u_n \me \mb v_1 \\ \vdots \\ v_n \me = u_1v_1 + ... + u_nv_n$$
+
+Note that $\bm{v^T u}$ would produce the same result and that the dot product is commutative. \\ \\
+
+The following properties hold true for any two vectors and scalar in $\R^n$:
+
+\begin{enumerate}
+    \item $\bm{u \cdot v} = \bm{v \cdot u}$
+    \item $\bm{(u + v)\cdot w = u\cdot w + v\cdot w}$
+    \item Likewise, $(c\bm{u})\bm{v} = c\bm{(u\cdot v) = \bm{u}}\cdot (c\bm{v})$. \emph{(Which is to say that scalars' placement do not affect the dot product.)}
+    \item $\bm{u \cdot u} \geq 0 \land (\bm{u \cdot u} = 0 \iff \bm{u = 0})$
+\end{enumerate}
+
+The \bt{length}, also known as the \bt{norm} or \bt{magnitude}, of a vector
+is given by the following equation:
+
+$$\underbrace{\norm{\bm{v}}}_{\textrm{norm of }\bm{v}} = \sqrt{\bm{v\cdot v}} = \sqrt{v_1^2 + \dots + v_n^2}$$
+
+Thus we can also see that $\norm{\bm{v}}^2 = \bm{v \cdot v}$. \\ \\
+
+Any constant factor $c$ of a vector \bt{t} can be factored out such that
+if $\bm{t} = \vecbrac{10, 20, 30}$, we could find $c = 10, \bm{v} =
+\vecbrac{1, 2, 3}$. Thus when calculating $\norm{\bm{t}}$, we see that\dots
+
+\begin{align*}
+    \norm{\bm{t}} =
+    & \norm{c\bm{v}} = \sqrt{c^2v_1^2 + \dots + c^2v_n^2} = \sqrt{c^2(v_1^2 + \dots + v_n^2)} \\ =
+    & \sqrt{c^2}\sqrt{(v_1^2 + \dots + v_n^2)} = \abs{c}\sqrt{(v_1^2 + \dots + v_n^2)} \\ \rightarrow
+    & \norm{c\bm{v}} = \abs{c}\norm{\bm{v}}
+\end{align*}
+
+A \bt{unit vector} is a vector of length $1$ and can be obtained by taking
+any vector and dividing it by its own length such that $\frac{\bm{u}}{\norm{\bm{u}}}$
+represents a unit vector for any \bt{u}. \\ \\
+
+To check that a vector is \emph{unitary}, simply calculate if $\norm{\bm{u}}^2 = 1$. That is to say,
+simply square and sum the components. \\ \\
+
+For any pair of vectores $\bm{u, v}$ in $\R^n$, their distance is defined as\dots
+
+$$\textrm{dist($\bm{u,v}$)} = \norm{\bm{u - v}}$$ \\ \\
+
+If two vectors $\bm{u, v}$ are orthogonal, then the distances between a fixed point of $\bm{u}$
+paired with alternatively with  the head or tail of $\bm{v}$, should be identical. This only occurs in $\R^2$ when one vector is
+exactly $90^\circ$ away in its orientation from the other and thus is perpendicular. \\ \\
+
+Otherwise, if one of the vectors were turned $90^\circ \pm x$ where $x \neq 0$, the once-perpendicular
+vector would skew to one side, creating less distance between one pair of points and more distance
+between the converse pair of points. \\ \\
+
+Formulaically, this means the vectors are orthogonal if $\bm{u \cdot v} = 0$.
+
+Similarly, two vectores $\bm{u,v}$ are orthogonal if and only if\dots
+
+$$\norm{\bm{u +v}}^2 = \norm{\bm{u}}^2 + \norm{\bm{v}}^2$$
+
+Both the above are because $\norm{\bm{u - (-v)}}^2$ and $\norm{\bm{u - v}}^2$ resolve
+to $\norm{\bm{u}}^2 + \norm{\bm{v}}^2 - 2\bm{u \cdot v}$ and $\norm{\bm{u}}^2 + \norm{\bm{v}}^2 + 2\bm{u \cdot v}$, respectively. \\ \\
+
+Thus, $2\bm{u \cdot v} = -2\bm{u \cdot v} \rightarrow \bm{u \cdot v} = 0 \rightarrow \bm{u \perp v}$. Likewise then for
+the original equations, we see $\norm{\bm{u - (-v)}}^2 = \norm{\bm{u - v}}^2 = \norm{\bm{u}}^2 + \norm{\bm{v}}^2$. \\ \\ 
+
+
+If a vector $\bm{z}$ is orthogonal to all vectors in the subspace $W$, then
+$\bm{z}$ is said to be \bt{completely orthogonal} to $W$. \\ \\
+
+Thus in $\R^3$ where $W$ is a plane, $\bm{z}$ can be thought of as a line
+that pierces $W$ and is orthogonal to all $\bm{w} \in W$. \\ \\
+
+The subspace \emph{completely orthogonal} to $W$ can be defined as $L$ where
+$L = W^\perp$ and passes through the origin. Likewise, the inverse holds
+as $W = L^\perp$ and is completely orthogonal to $L$. Every vector that spreads from
+$\bm{0}$ outward in $W$ is orthogonal to every vector that spreads outward from the origin in $L$. \\ \\
+
+A vector $\bm{x} \in W^\perp \iff \forall \bm{w} \in W: \bm{x} \perp \bm{w}$. \\ \\
+
+Note that where $W$ can be represented by an $m \times n$ matrix, $W^\perp$ is a subspace of $\R^n$. \\ \\
+
+For a matrix $A_{m \times n}$, the following holds:
+
+\begin{itemize}
+    \item $\textrm{Fila($A$)}^\perp = \textrm{Nul($A$)}$
+    \item Thus, by the rule that ${(W^\perp)}^\perp = W$, $\textrm{Fila($A$)} = \textrm{Nul$A$}^\perp$.
+    \item $\textrm{Col($A$)}^\perp = \textrm{Nul$(A^T)$}$
+    \item $\textrm{Col($A$)} = \textrm{Nul$(A^T$)}^\perp$
+\end{itemize}
+
+This is to say that the row space is completely orthogonal to the null space of $A$, and the column space of $A$ is completely orthogonal
+to the nullspace of its transpose. Thus, $\textrm{Fila($A$)}^\perp = \textrm{Nul$(A)$} \rightarrow \textrm{Fila($A$)} \perp \textrm{Nul($A$)}$. \\ \\
+
+Remember that $\textrm{Fila($A$)} \equiv \textrm{Col($A^T$)}$ and so\dots
+
+$$\textrm{Col($A^T$)}^\perp = \textrm{Nul$A$}$$
+
+Note then that transposing one argument in the above equation transposes the other. Likewise, Remember
+that the rows are a subspace of $\R^n$ and columns are a subspace of $\R^m$. \\ \\
+
+The reason why this is true is that every vector in the null space is a vector of $n$ entries, and each null vector
+when multiplied through the matrix is essentially dotted with each row vector (as every entry in each column is affected by one scalar from the null space vector). \\ \\
+
+See the following illustration where $\bm{n}$ is a vector from the null space:
+
+$$a_{1,1}n_1 + a_{1,2}n_2 + \dots + a_{1_n}n_n = 0 \rightarrow \bm{a_1^T}\bm{n} = 0 \rightarrow \forall c: \bm{a_c^T}\bm{n} = 0$$
+
+\section*{Orthogonal Sets}
+
+A set of vectors $\bm{\set{u_1 \dots u_p}} \in \R^n$ is a \bt{orthogonal set}
+if every vector in the set is orthogonal to every other vector in the set.
+
+Thus is it is impossible to select any $\bm{u_{c_1}, u_{c_2}}$ such that $\bm{u_{c_1} \cdot u_{c_2}} \neq 0$. \\ \\
+
+If $S = \set{\bm{u_1, \dots, u_p}}$ is an orthogonal set of vectors distinct from $\bm{0}$, then
+$S$ forms a linearly independent base for the subspace generated by $S$. \\ \\
+
+Note that an \bt{orthogonal base} for a subspace $W \in \R^n$ is both a base for $W$ and an orthogonal set. \\ \\
+
+If $\set{\bm{u_1,\dots,u_p}}$ is an orthogonal base for $W$ in $\R^n$, then every \bt{y} in $W$
+(whose definition is $\bm{y} = c_1\bm{u_1} + \dots + c_p\bm{u_p}$), has its weights $c_j$ given by\dots
+
+$$c_j = \frac{\bm{y \cdot u_j}}{\bm{u_j \cdot u_j}} \textrm{ where } j \in \set{1, \dots, p}$$
+
+And thus\dots
+
+$$\bm{y} = \frac{\bm{y \cdot u_1}}{\bm{u_1 \cdot u_1}}\bm{u_1} + \dots + \frac{\bm{y \cdot u_p}}{\bm{u_p \cdot u_p}}\bm{u_p}$$
+
+For a given distinct vector \bt{u}, any given vector \bt{y} can be written as a composition
+of $\bm{u}$ and a vector orthogonal to $\bm{u}$.
+
+$$\bm{y = \hat{y} + z}$$
+
+In the above, $\bm{\hat{y}} = \alpha \bm{u}$ for any $\alpha$ and \bt{z} is a vector orthogonal to $\bm{u}$.
+Thus, $\bm{z} = \bm{y} - \alpha\bm{u}$ and $(\bm{y - \hat{y}})\perp\bm{u}$. See that\dots
+
+$$\bm{z \perp u} \iff (\alpha = \frac{\bm{y \cdot u}}{\bm{u \cdot u}})\land(\bm{\hat{y}} = \frac{\bm{y \cdot u}}{\bm{u \cdot u}}\bm{u})$$
+
+The vector $\bm{\hat{y}}$ is said to be the \bt{orthogonal projection} of \bt{y} over \bt{u}, and \bt{z} is the component
+of \bt{y} that is orthogonal to \bt{u}. \\ \\
+
+Note that $\bm{u}$ could be multiplied by any scalar $c$ and the equations would still hold.
+
+$$\bm{\hat{y}} = \textrm{proj}_L\bm{y} = \frac{\bm{y \cdot u}}{\bm{u \cdot u}}\bm{u}$$
+
+Because the projection is determined by the subspace (line) $L$ generated between $\bm{0}$ and $\bm{u}$,
+$\textrm{proj}_L\bm{y}$ is called the \bt{orthogonal projection of y over $L$}. However, the meaning
+does not differ whether it is "over $L$" or "over \bt{u}". \\ \\
+
+In the case where $W = \R^2 = \gen{\bm{u_1, u_2}}$ and
+$\bm{y} = \frac{\bm{y \cdot u_1}}{u_1 \cdot u_1}\bm{u_1} + \frac{\bm{y \cdot u_2}}{u_2 \cdot u_2}\bm{u_2}$,
+the first term of \bt{y} is the projection of \bt{y} over $\bm{u_1}$ and the second term is the projection of \bt{y} over $\bm{u_2}$. So
+\bt{y} is the sum of its projections over the orthogonal axes determined by the base of $\R^2$. \\ \\
+
+A \bt{orthonormal set} is a set of completely mutually orthogonal vectors that are also all unitary.
+If $W$ is a subspace generated by such a set, then the set is an \bt{orthonormal base} for $W$. \\ \\
+
+The standard base is an example of an orthonormal set. \\ \\
+
+A matrix $U_{m \times n}$ has orthonormal columns if and only if $U^T U = I$. Thus that equality can be used as a test for orthonormality. \\ \\
+
+Note too that a matrix $A^T A$ is invertible if and only if $A$ has linearly independent columns. \\ \\
+
+If $U_{m \times n}$ indeed has orthnormal columns, then the following properties are true:
+
+\begin{enumerate}
+    \item $\norm{U\bm{x}} = \norm{\bm{x}}$
+    \item $(U\bm{x})\cdot(U\bm{y}) = \bm{x \cdot y}$
+    \item $(U\bm{x})\cdot(U\bm{y}) = 0 \iff \bm{x \cdot y} = 0$
+\end{enumerate}
+
+An \bt{orthogonal matrix} is a square, invertible matrix $U$ such that $U^{-1} = U^T$,
+and it has orthonormal columns. \\ \\
+
+Note that \emph{any} square matrix with orthonormal columns is an orthogonal matrix. \\ \\
+
+Likewise, any orthonormal matrix additionally, as a "byproduct", has orthonormal rows as well.
+
+\section*{Orthogonal Projections}
+
+Given a vector \bt{y} and a subspace $W \in \R^n$, there exists some
+vector $\bm{\hat{y}} \in W$ such that $\bm{\hat{y}}$ is the unique vector in $W$
+for which $\bm{y - \hat{y}}\perp W$ and such that $\bm{\hat{y}}$ is the vector in $W$
+most close to $\bm{y}$. \\ \\
+
+A vector \bt{y} in $\R^n$ can always be represented as a linear combination of the vectors $\bm{u_1},\dots,\bm{u_n} \in \R^n$.
+This linear combination can be grouped such that $\bm{y = z_1 + z_2}$ where $\bm{z_1}$ is some group of some $\bm{u_c}$'s and $\bm{z_2}$ is
+some group of the remaining $\bm{u_c}$'s. \\ \\
+
+Thus if there exists a vector \bt{y} in the orthogonal base $\set{\bm{u_1,\dots,u_5}} \in \R^5$, and there exists a subspace of that space, say $W = \gen{\bm{u_1, u_2}}$, then \bt{y} can
+be written as a combination of the vectors in $W$ and $\R^5\setminus W$.
+
+$$\bm{y} = \underbrace{c_1\bm{u_1} + c_2\bm{u_2}}_{\bm{z_1}} + \underbrace{c_3\bm{u_3} + c_4\bm{u_4} + c_5\bm{u_5}}_{\bm{z_2}}$$
+
+In the above example, $\bm{z_2} \in \R^5 \setminus W$ (or $\gen{\bm{u_3, u_4, u_5}}$) and $\bm{z_1} \in W$. \\ \\
+
+In this case, any vector in $\bm{z_1}$ dotted with $\bm{z_2}$ is always $0$, as is $\bm{z_1 \cdot z_2} = 0$. For that reason,
+$\bm{z_2} \in W^\perp$. \\ \\
+
+If $W$ is a subspace of $\R^n$, then for all $\bm{y} \in \R^n$, $\bm{y} = \bm{\hat{y}} + \bm{z}$ where $\bm{\hat{y}} \in W$ y $\bm{z} \in W^\perp$. \\ \\
+
+As with the case in the section before, $\bm{\hat{y}}$ and $\bm{z}$ are defined the same way but extrapolated over dimensions:
+
+$$\bm{\hat{y}} = \textrm{proj}_W\bm{y} = \frac{\bm{y \cdot u_1}}{\bm{u_1 \cdot u_1}}\bm{u_1} + \dots + \frac{\bm{y \cdot u_p}}{\bm{u_p \cdot u_p}}\bm{u_p}$$
+
+$$\bm{z = y - \hat{y}}$$
+
+The orthogonal projection of the vector \bt{y} is the sum of its projections over the unidimensional subspaces which are mutually orthogonal. \\ \\
+
+If $\bm{y} \in W$ and $W = \gen{\bm{u_1,\dots,u_p}}$, and also $\set{\bm{u_1,\dots,u_p}}$ is an orthogonal base, then $\textrm{proj}_W\bm{y} = \bm{y}$ \\ \\
+
+If $W$ is a subspace for $\R^n$ and \bt{y} is any vector in $\R^n$ and also $\bm{\hat{y}}$ is the orthogonal projection
+of \bt{y} over $W$, then $\bm{\hat{y}} \in W$ is the point most close to $\bm{y}$:
+
+$$\forall \bm{v \neq \hat{y}}: \norm{\bm{y - \hat{y}}} < \norm{\bm{y - v}}$$
+
+If $\set{\bm{u_1,\dots,u_p}}$ is an orthonormal base for $W \in \R^n$, then\dots
+
+$$\textrm{proj}_W\bm{y} = (\bm{y}\cdot\bm{u_1})\bm{u_1} + \dots + (\bm{y}\cdot\bm{u_p})\bm{u_p}$$
+
+Note the difference is that we do not need to divide each summand by its length, as the bases are already normalized. \\ \\
+
+And so if there exists $U$ such that $U = [\bm{u_1} \dots \bm{u_p}]$, then the projection of $\bm{y}$, $\bm{\hat{y}}$ becomes \dots
+
+$$\forall \bm{y} \in \R^n: \textrm{proj}_W\bm{y} = UU^T\bm{y}$$
+
+Note $UU^T\bm{y}$ is equivalent to the elaborated form immediately before.
+
+\section*{The Gram-Schmidt Process}
+
+\bt{The Gram-Schmidt Process} is a algorithm for obtaining an orthogonal or
+orthonormal base for any subspace different from $\set{\bm{0}}$ in $\R^n$. \\ \\
+
+Given a base $\set{\bm{x_1,\dots,x_p}}$ for $W$ in $\R^n$, the algorithm works as follows:
+
+\begin{align*}
+    & \bm{v_1 = x_1} \\
+    & \bm{v_2 = x_2 - \frac{x_2 \cdot v_1}{v_1 \cdot v_1}v_1} \\
+    & \bm{v_3 = x_3 - \frac{x_3 \cdot v_1}{v_1 \cdot v_1}v_1 - \frac{x_3 \cdot v_2}{v_2 \cdot v_2}v_2} \\
+    & \vdots \\
+    & \bm{v_p = x_p - \frac{x_p\cdot v_1}{v_1\cdot v_1}v_1 - \frac{x_p\cdot v_2}{v_2\cdot v_1}v_2 - \dots - \frac{x_p\cdot v_{(p-1)}}{v_{(p-1)}\cdot v_{(p-1)}}v_{(p-1)}}
+\end{align*}
+
+So the set $\set{\bm{v_1,\dots,v_p}}$ becomes an equal set to $\set{\bm{x_1,\dots,x_p}}$ but is orthogonal. Further,
+any equally indexed vectors can be removed from the two sets and the two sets will remain equal. \\ \\
+
+The base could then be made orthonormal by manually normalizing each vector using division over their lengths. \\ \\
+
+If $A_{m \times n}$ is a matrix with linearly independent columns, then $A$ can be factorized as $A = QR$ where $Q_{m\times n}$ has the columns which
+form a orthonormal base for $\textrm{Col}\,A$ and where $R$ is an invertible superior triangle matrix that contains
+the positive integers that inform how to convert $Q$'s columns into $A$'s original non-orthonormal columns. \\ \\
+
+This is possible because each vector $\bm{x_k}$ is composed:
+
+$$\bm{x_k} = r_{1k}\bm{u_1} + \dots + r_{kk}\bm{u_k} + 0 \cdot \bm{u_{k + 1}} + \dots + 0 \cdot \bm{u_n}$$
+
+Note that $\bm{r_k}$ is a given column vector.
+
+$$\bm{r_k} = \mb r_{1k} \\ \vdots \\ r_{kk} \\ 0 \\ \vdots \\ 0 \me$$
+
+Finally, then, $\bm{x_k} = Q\bm{r_k}$ for $k \in {\set{1,\dots,n}}$, and $R = [\bm{r_1}\dots\bm{r_n}]$.
+
+$$A = [\bm{x_1\dots x_n}] = [Q\bm{r_1}\dots Q\bm{r_n}] = QR$$
+
+Note that $Q^T Q = I$ due to it being an orthonormal matrix. Because $A = QR$, we
+have it that $Q^T A = R$. Thus we have an easy way of calculating $R$ after
+having calculated $Q$ through the Process of Gram-Schmidt.
+
+\section*{Problems of Least Squares}
+
+If $A_{m \times n}, \bm{b} \in \R^m$, the \bt{solution of least squares}
+$A\bm{x = b}$ is an $\bm{\hat{x}}$ where:
+
+$$\forall \bm{x} \in \R^n: \norm{\bm{b} - A\bm{\hat{x}}} \leq \norm{\bm{b} - A\bm{x}}$$
+
+That is simply to say that $\bm{\hat{x}}$ minimizes the distance between
+the vector outside of the column space of $A$ moreso than any other vector within the column space. \\ \\
+
+Note that the "least squares" portion of the solution's name refers to the fact
+that distance is calculated by \emph{squaring} and summing the entries of a vector
+(before, of course, rooting it). \\ \\
+
+The vector $\bm{\hat{b}}$, defined as $\textrm{proy}_{\textrm{Col($A$)}}\bm{b}$, is the vector
+projection of \bt{b} over the column space of $A$ and does have a consistent solution such that $A\bm{\hat{x}} = \bm{\hat{b}}$. \\ \\
+
+Note then in that case, $\bm{b} - A\bm{\hat{x}}$ is the orthogonal component of \bt{b}
+to $A$ such that, when summed with the non-orthogonal component, a solution can be described:
+
+$$(\bm{b} - A\bm{\hat{x}}) + \bm{\hat{b}} = \bm{b}$$
+
+The set of all possible least squares solutions to $A\bm{x} = \bm{b}$ is equal to the
+non-empty set of solutions to $A^T A\bm{x} = A^T \bm{b}$. \\ \\
+
+When $A$ is $m \times n$, we see:
+
+
+$$A^T_{n \times m} A_{m \times n}\bm{x}_{n \times 1} = A^T_{n \times m} \bm{b}_{m \times 1}$$
+
+$$(A^T A)_{n \times n} \bm{x}_{n \times 1} = (A^T \bm{b})_{n \times 1}$$
+
+Thus the above can then be solved via two routes:
+
+\begin{itemize}
+    \item Solving for the inverse, if one exists, and calculating $\bm{x} = (A^T A)^{-1} A^T \bm{b}$.
+    \item Using row-reduction techniques on the matrix $[A^T A | A^T\bm{b}]$.
+\end{itemize}
+
+The following statements about a matrix $A_{m \times n}$ are logically equivalent and
+thus all true or all false:
+
+\begin{enumerate}
+    \item The equation $A\bm{x = b}$ has a \emph{unique} least squares solution for every \bt{b} in $\R^m$.
+    \item The columns of $A$ are linearly independent.
+    \item The matrix $A^T A$ is invertible.
+\end{enumerate}
+
+Thus when any one of the above is known to be true, we know that $\bm{\hat{x}} = (A^T A)^{-1} A^T \bm{b}$. \\ \\
+
+Note then that when determining if the above solution can be used when examining a matrix, the easist method is to check for columnal independence. \\ \\
+
+Note that the \emph{distance} between \bt{b} and $A\bm{\hat{x}}$ is known as the \bt{error of least squares} of the
+approximation. \\ \\
+
+\section*{Diagonalization of Symmetrical Matrixes}
+
+A matrix $A$ is \bt{symmetric} if a matrix $A^T = A$; i.e., its entries
+not along the diagonal present in pairs. \\ \\
+
+If $A$ is symmetric, then any two of its eigenvectors from different
+eigenspaces are orthogonal. This is to say that the different eigenspaces
+are mutually orthogonal. \\ \\
+
+$A_{n \times n}$ is orthogonally diagonalizable if there exists an
+orthonormal matrix $P$ (where $P^{-1} = P^T$) and a diagonal matrix $D$
+such that $A = PDP^{-1} = PDP^T$. \\ \\
+
+The above diagonalization requires $n$ orthonormal, linearly independent eigenvectors.
+
+Because $A = PDP^T$, we see then that:
+
+$$A^T = (PDP^T)^T = P^{TT}D^T P^T = PDP^T = A$$
+
+Thus, by virtue of the fact that an orthogonally diagonalizable matrix
+requires a $P$ such that $P^{-1} = P^T$, we see that this then implies
+that any valid matrix with a diagonalization of said $P$ is ultimately
+its own transpose. \\ \\
+
+Therefore, \bt{all} matrices that are \bt{orthogonally diagonalizable} are \emph{also} \bt{symmetric} and all
+matrices that are symmetric are orthogonally diagonalizable. \\ \\
+
+\section*{Spectral Theorem}
+
+The set of eigenvalues of a matrix $A$ is sometimes denoted the \bt{spectrum}
+of $A$. The \bt{spectral theorem} suggests the following for a symmetric matrix $A$:
+
+\begin{enumerate}
+    \item $A$ has $n$ real eigenvalues, counting the multiplicities.
+    \item The dimension of the eigenspace (or \emph{geometric multiplicity}) for every eigenvalue is equal
+    to the multiplicity of the eigenvalue as the root of the characteristic equation.
+    \item The eigenspaces are mutually orthogonal in the sense that all eigenvectores that correspond to different eigenvalues are orthogonal.
+    \item $A$ is orthogonally diagonalizable.
+\end{enumerate}
+
+If $A = PDP^{-1}$ and the columns of $P$ are orthonormal eigenvectors
+$\bm{u_1,\dots,u_n}$ of $A$ and the corresponding eigenvalues are in
+the diagonal matrix $D$, then $P^{-1} = P^T$. \\ \\
+
+This is because $P$ is orthonormal with linearly independent columns. \\ \\
+
+$$A = PDP^T = [\bm{u_1 \dots u_n}] \mb \lambda_1 & \dots & 0 \\ \vdots & \ddots & \vdots \\ 0 & \dots & \lambda_n \me \mb \bm{u_1^T} \\ \vdots \\ \bm{u_n^T}\me$$
+
+$$A = [\lambda_1 \bm{u_1} \dots \lambda_n \bm{u_n}] \mb \bm{u_1^T} \\ \vdots \\ \bm{u_n^T} \me$$
+
+$$A = \lambda_1 \bm{u_1 u_1^T} + \dots + \lambda_n\bm{u_n u_n^T}$$
+
+The representation of $A$ as $\lambda_1 \bm{u_1 u_1^T} + \dots + \lambda_n\bm{u_n u_n^T}$ is called the
+\bt{spectral decomposition} of $A$ because $A$ is divided into parts determined
+by its spectrum (i.e., its eigenvalues). Each term in the decomposition is a
+$n \times n$ matrix of range $1$. \\ \\
+
+Every matrix $\bm{u_c u_c^T}$ is a matrix of projection in that for every $\bm{x} \in \R^n$, $\bm{u_c u_c^Tx}$ is the orthogonal projection of $\bm{x}$
+over the subspace generated by $\bm{u_c}$.
+
+\subsection*{Matrix-Matrix Multiplication}
+
+The reason that $A = \lambda_1 \bm{u_1 u_1^T} + \dots + \lambda_n\bm{u_n u_n^T}$ holds is because the column-row expansion of two matrices $A_{m \times n}, B_{n \times p}$ functions as so:
+
+$$[\bm{a_1} \dots \bm{a_n}] \mb \bm{b_1^T} \\ \vdots \\ \bm{b_n^T} \me = \bm{a_1 b_1^T} + \dots + \bm{a_n b_n^T}$$
+
+Each entry $\bm{a_c b_c^T}$ represents its own matrix. When summed, they create a sum of matrices. \\ \\
+
+To see why this is the case, see that a given entry $(i,j)$ in $\bm{a_c} \bm{b_c^T}$, is the product of
+$A_{i,c}$ and $B_{c,j}$  and obtained from $\bm{a_c}$ and $\bm{b_c^T}$, respectively. \\ \\
+
+See the below example where $\bm{a_2} = \mb b \\ d \me, \bm{b_2^T} = \mb y & z \me$:
+
+$$\bm{a_2 b_2^T} = [\mb b \\ d \me y \; \mb b \\ d \me z] = \mb (b)(y) & (b)(z) \\ (d)(y) & (d)(z) \me = \mb A_{1,2} B_{2,1} & A_{1,2} B_{2,2} \\ A_{2,2} B_{2,1} & A_{2,2} B_{2,2} \me$$
+
+$$A_{\underbrace{1,2}_{c=1,2}} \cdot B_{\underbrace{2,1}_{2,c=1}} = (\bm{a_2})_1 + (\bm{b_2})_1 = (b)(y)$$
+
+To get the final $(i,j)$ entry in the product matrix, the above is calculated for $c$ across all posiblities
+and all findings are summed. \\ \\
+
+Each entry of the matrix product is given as $a_{i,1}b_{1,j} + \dots + a_{i,n}b_{n,j}$. \\ \\
+
+To elaborate on the above example, if we are given that $A = \mb a & b \\ c & d \me$, $B = \mb w & x \\ y & z \me$, then the nondescribed component of their product
+is  $\bm{a_1 b_1^T}$:
+
+$$\bm{a_1 b_1^T} = [\mb a \\ c \me w \; \mb a \\ c \me x] = \mb (a)(w) & (a)(x) \\ (c)(w) & (c)(x) \me$$
+
+The final result is this:
+
+$$AB = \bm{a_1 b_1^T} + \bm{a_2 b_2^T} = [\mb a \\ c \me w \; \mb a \\ c \me x] + [\mb b \\ d \me y \; \mb b \\ d \me z]$$
+$$AB = \mb aw & ax \\ cw & cx \me + \mb by & bz \\ dy & dz \me = \mb aw + by & ax + bz \\ cw + dy & cx + dz \me$$
+
+\section*{Quadratic Form}
+
+A \bt{quadratic form} in $\R^n$ is a function $Q$ defined over $\R^n$
+whose value is a vector $\bm{x}$ of $\R^n$ that can be calculated through an expression
+of the form $Q(\bm{x}) = \bm{x^T}A\bm{x}$, where $A$ is $n \times n$ and symmetric.
+Note that $A$ is known as the \bt{matrix of the quadratic form}. \\ \\
+
+The above expression can be written as so:
+
+$$\bm{x^T}A\bm{x} = Q(\bm{x}) = \mb x_1 & \dots & x_n \me (A \mb x_1 \\ \vdots \\ x_n \me)$$
+
+Where $Q(\bm{x}) = 5x_1^2 + 3x_2^2 + 2x_3^2 -x_1x_2 + 8x_2x_3$, its $A$
+matrix can be reverse-engineered by observing the pattern of coefficients in the
+equation. \\ \\
+
+The coefficients of the squared values go along the diagonal
+in fashion corresponding to the index of $x$. Essentially, the $c$ in $x_c$ tells you
+to place the coefficient of $x_c$ in $A_{c,c}$. \\ \\
+
+The coefficients which are shared by two $x_c$'s are divided amongst them, and the indices
+indicate which two places the coefficient's halves go. E.g., $-x_1x_2$
+calls for $-0.5$ placed in $A_{1,2}$ and $A_{2,1}$. \\ \\
+
+Thus the correct $\bm{x^T}A\bm{x}$ equation for the above equation is the following:
+
+$$Q(\bm{x}) = \mb x_1 & x_2 & x_3 \me 
+\mb 5 & -1/2 & 0 \\ -1/2 & 3 & 4 \\ 0 & 4 & 2 \me 
+\mb x_1 \\ x_2 \\ x_3 \me$$
+
+If $\bm{x}$ represents a vector variable in $\R^n$, then a \bt{change of variable}
+is an equation of the form $\bm{x} = P\bm{y}$, and thus $\bm{y} = P^{-1}\bm{x}$, where $P$ is $A$'s orthonormal eigenvector-based matrix and $\bm{y}$ is a new vector variable in $\R^n$. \\ \\
+
+Here, \bt{y} is the vector of coordinates of $\bm{x}$ with respect to the base of $\R^n$ determined by
+the columns of $P$. \\ \\
+
+The following can be deduced by replacing $\bm{x}$:
+
+$$\bm{x^T}A\bm{x} = (P\bm{y})^T A(P\bm{y}) = \bm{y^T}P^TAP\bm{y} = \bm{y^T}(P^TAP)\bm{y}$$
+
+And because $A = PDP^T$, $D = P^TAP$, and thus we have the simplification\dots
+
+$$\bm{x^T}A\bm{x} = \bm{y^T}D\bm{y}$$
+
+Where $A$ is a symmetric matrix of $n \times n$, there exists a change of orthogonal variable
+where $\bm{x} = P\bm{y}$, that converts the quadratic form $\bm{x^T}A\bm{x}$ into $\bm{y^T}D\bm{y}$ 
+\emph{without cross products}. \\ \\
+
+A quadratic form $Q$ is \dots
+
+\begin{itemize}
+    \item \dots\bt{positive definite} if $Q(\bm{x}) > 0$ for all $\bm{x} \neq \bm{0}$.
+    \item \dots\bt{negative definite} if $Q(\bm{x}) < 0$ for all $\bm{x} \neq \bm{0}$.
+    \item \dots\bt{indefinite} if $Q(\bm{x})$ takes positive and negative values.
+    \item \dots\bt{positive semidefinite} if $Q(\bm{x}) \geq 0$ for all $\bm{x}$.
+    \item \dots\bt{negative semidefinite} if $Q(\bm{x}) \leq 0$ for all $\bm{x}$.
+\end{itemize}
+
+Because in quadratic form all coefficients are defined by the eigenvalues of the matrix
+(as shown by a change of variable to \bt{y} in which all variable terms are squared and there are no cross products
+and those variable terms have the diagonal's entries as coefficients),
+the eigenvalues themselves can be used to determine how the quadratic is defined. \\ \\
+
+However, eigenvalues are costly to compute and take a lot of time. Instead, a matrix
+can be brought to staircase form, and if any of its pivots are negative, then it
+the matrix is not positively defined. \\ \\
+
+For a matrix $A_{n \times n}$, a quadratic form $\bm{x^T}A\bm{x}$ is\dots
+
+\begin{enumerate}
+    \item \dots positive definite if and only if all eigenvalues of $A$ are positive.
+    \item \dots negative definite if and only if all eigenvalues of $A$ are negative.
+    \item \dots indefinite if and only if $A$ has eigenvalues that are both positive and negative.
+\end{enumerate}
+
+To find the maximum and minimum values of a quadratic form $Q(\bm{x})$ (where $\bm{x^T}A\bm{x} = 1$),
+as is formalized below \dots
+
+\begin{enumerate}
+    \item $m = \textrm{min}\set{\bm{x^T}A\bm{x}: \norm{x} = 1}$
+    \item $M = \textrm{max}\set{\bm{x^T}A\bm{x}: \norm{x} = 1}$
+\end{enumerate}
+
+\dots we exploit the fact that $m$ and $M$ are defined as the smallest and largest eigenvalues
+of $A$, respectively. \\ \\
+
+Thus $\bm{x^T}A\bm{x}$ is $M$ when $\bm{x}$ is the unitary eigenvector
+associated with the largest eigenvalue. \\ \\
+
+Likewise, $\bm{x^T}A\bm{x}$ is $m$ when $\bm{x}$ is the unitary eigenvector
+associated with the smallest eigenvalue. \\ \\
+
+When we have a given quadratic form such as $9x_1^2 + 4x_2^2 + 3x_3^2$
+with restiction $\bm{x^T}A\bm{x} = 1$, we can find the maximum and minimum
+values easily by looking at the maximum and minimum coefficients of the squares. If
+the quadratic form has cross product, we need to calculate the eigenvalues manually. \\ \\
+
+Note that there is always a quadratic form without cross products. \\ \\
+
+\section*{Singular Value Decomposition}
+
+A \bt{singluar value decomposition} allows us to measure the quantities
+by which $A$ stretches or compresses eigenvectors. \\ \\
+
+If $A$ is $m \times n$, then $A^TA$ is orthogonally diagonalizable. If $\set{\bm{v_1,\dots,v_n}}$
+is an orthonormal base for $\R^n$ that consists of the eigenvectors of $A^TA$, and $\lambda_1,\dots,\lambda_n$
+are the eigenvalues associated with $A^TA$, then we find that\dots
+
+$$\norm{A\bm{v_c}}^2 = \underbrace{(A\bm{v_c})^TA\bm{v_c}}_{\textrm{squared dot product}} = \bm{v_c^T}A^TA\bm{v_c} = \bm{v_c^T}(\lambda_c \bm{v_c}) = \lambda_c \underbrace{(\bm{v_c^T}\bm{v_c})}_{\norm{\bm{v_c}}^2 = 1} = \lambda_c$$
+
+For this reason, all the eigenvalues of $A^TA$ are not negative. \\ \\
+
+The \bt{singular values} of $A$ are the square roots of the eigenvalues of $A^TA$
+and they are denoted $\sigma_1,\dots,\sigma_n$. I.e., each eigenvalue
+of $A^TA$ denoted $\lambda_c$ is actually $\sigma_c^2$ and $\sigma_c = \sqrt{\lambda_c}$. \\
+
+The singular values of $A$ are actually the lengths of the vectors $A\bm{v_1},\dots,A\bm{v_n}$ as $\sigma_c = \sqrt{\lambda_c} = \norm{A\bm{v_c}}$ (where $\bm{v_c}$ is a unitary base eigenvector). \\ \\
+
+Note that the singular values and eigenvalues in any matrices in decomposition are written in \emph{decreasing} order, left to right. \\ \\
+
+The maximum and minimum length vectors $\bm{x_c}$ of a matrix $A$ under the restriction that $\norm{\bm{x_c}} = 1$ are given
+by the normalized eigenvectors encountered in $A^TA$, $\bm{v_c}$, multiplied by $A$. Therefore the maximum and minimum lengths are provided
+by those vectors norms', and those vectors norms' are \emph{simply their associated singular values}. \\ \\
+
+The above then implies that $\sigma_1$ indicates the maximum length and $\sigma_r$ indicates the minimum. \\ \\
+
+If the following hold\dots
+
+\begin{itemize}
+    \item There exists $\set{\bm{v_1,\dots,v_n}}$ as an orthonormal base for $\R^n$ and it consists of eigenvectors of $A^TA$.
+    \item Those eigenvectors are arranged such that their correspondening eigenvalues, which are of $A^TA$, satisfy $\lambda_1 \geq \dots \geq \lambda_n$.
+    \item $A$ has $r$ singular values different from $0$.
+\end{itemize}
+
+\dots then $\set{A\bm{v_1},\dots,A\bm{v_r}}$ is an orthogonal base for $\textrm{Col}\,A$ and $\textrm{range}\,A = r$.
+
+The decomposition of $A$ implies a matrix $\Sigma$ of $m \times n$.
+
+$$\Sigma = \mb D & \dots & 0 \\ \vdots & \ddots & \vdots \\ 0 & \dots & 0 \me$$
+
+In the above matrix $\Sigma$, there are $r$ files and columns in $D$ (i.e., $D$ is $r \times r$), and that leaves $m-r$ files and $n-r$ columns comprised
+of only $0$'s in $\Sigma$. Note that $r$ can be equal to $m$ or $n$ or both, but it can not exceed either dimension. \\ \\
+
+If $A$ is $m \times n$ with range $r$, then there exists a matrix $\Sigma$ that is $m \times n$ in which the diagonal entries in
+$D$ (which is in $\Sigma$) are the singular values of $A$ ($\sigma_1 \geq \dots \geq \sigma_r > 0$), and there exists an
+orthogonal matrix $U$ of $m \times m$ and an orthogonal matrix $V$ of $n \times n$ such that $A = U\Sigma V^T$. Note that $U$ and $V$ are orthogonal to each other.
+Not only are they orthogonal to each other, but they are orthonormal in themselves.
+
+$$A_{m \times n} = U_{m \times m}\Sigma_{m \times n}V^T_{n \times n}$$
+
+While $D$ is unique, the forms of $U$ and $V$ are not necessarily. \\ \\
+
+The columns of $U$ are called the \bt{left singular vectors} of $A$ and the columns of $V$ are called the \bt{right singular vectors} of $A$. \\ \\
+
+Note the following \bt{very important properties} of a singular value decomposition:
+
+\begin{enumerate}
+    \item The column space of $A$ is spanned by the columns of $U$ corresponding to non-zero singular values in $\Sigma$. These columns form a basis for the column space.
+    \item The row space of $A$ is spanned by columns of $V$ (i.e., the rows of $V^T$) corresponding to non-zero singular values in $\Sigma$. These rows form a basis for the row space.
+    \item The null space of $A$ is spanned by the columns of $V$ corresponding to zero singular values in $\Sigma$. These columns form a basis for the null space.
+    \item The null space of $A^T$ is the same as the null space of $A$. I.e., it is spanned by the columns of $V$ corresponding to zero singular values in $\Sigma$.
+\end{enumerate}
+
+The final portions of the theorem of the invertible matrix are announced:
+
+\begin{itemize}
+    \item $(\textrm{Col}\,A)^\perp = \set{\bm{0}}$
+    \item $(\textrm{Nul})\,A^\perp = \R^n$
+    \item $\textrm{Fil}\,A = \R^n$
+    \item $A$ has $n$ singular values different from $0$.
+\end{itemize}
+
+The following are the algorithmic steps for finding a singular value
+decomposition for $A$:
+
+\begin{enumerate}
+    \item Calculate $A^TA$ from $A$.
+    \item Calculate the eigenvalues of $A^TA$ by way of $\det (A^TA - \lambda I)$.
+    \item Calculate the eigenvectors of $A^TA$ by way of reducing $A - \lambda_c I$.
+    \item Normalize the eigenvectors so that they are unitary.
+    \item Create $V$ with said eigenvectors and order them from greatest to least according to their respective eigenvalues.
+    \item If $V$ is does not have $n$ columns, expand $V$ into an orthonormal base for $\R^n$. This involves finding mutually orthogonal vectors and normalizing them. I.e., find $\textrm{Nul(Col($V^T$))}$ and use the \emph{Gram-Schmidt Process} on the null space's base. Ensure that the new columns are sorted by eigenvalue.
+    \item Create $\Sigma$ using the singular values of $A$ (i.e., the square roots of the eigenvalues of $A^TA$) in descending order. $\Sigma$ should have the same dimensions as $A$.
+    \item Normalize $A\bm{v_1},\dots,A\bm{v_r}$. (As $A$ has range $r$, the first $r$ columns of $U$ are the normalized vectors $A\bm{v_1},\dots,A\bm{v_r}$ not equal to $\bm{0}$. Note that $\norm{A\bm{v_c}} = \sigma_c$, so $\bm{u_c} = \frac{1}{\sigma_c}A\bm{v_c}$.)
+    \item Create $U$ with the normalized vectors from the previous step.
+    \item If $U$ is does not have $m$ columns, expand $U$ into an orthonormal base for $\R^m$. This involves finding mutually orthogonal vectors and normalizing them. I.e., find $\textrm{Nul(Col($U^T$))}$ and use the \emph{Gram-Schmidt Process} on the null space's base. Ensure that the new columns are sorted by eigenvalue.
+    \item Assemble the decomposition according to $A = U\Sigma V^T$.
+\end{enumerate}
+
+\section*{The Complete Theorem of the Invertible Matrix}
+
+\begin{itemize}
+    \item $A$ has an inverse and $A^T$ has an inverse: $(A^T)^{-1} =(A^{-1})^T$.
+    \item $A$ is row-equivalent to $I_{n}$.
+    \item $A$ has $n$ pivot positions.
+    \item The columns of $A$ form a linearly independent set.
+    \item $A\bm{x} = \bm{0}$ has only the trivial solution.
+    \item The linear transformation $\bm{x} \rightarrowtail A\bm{x}$ is one-to-one: $A$ is injective.
+    \item The linear transformation $\bm{x} \rightarrowtail A\bm{x}$ maps $\R^n$ over $\R^n$: $A$ is surjective.
+    \item $A$ is both injective and surjective, and therefore it is bijective.
+    \item $A\bm{x} = \bm{b}$ has a unique solution $A^{-1}\bm{b}= \bm{x}$ for all \bt{b} in $\R^n$.
+    \item The columns of $A$ generate $\R^n$.
+    \item The columns of $A$ form a base of $\R^n$.
+    \item The column space is equal to $\R^n$: $\textrm{Col}\; A = \R^n$
+    \item The file space is equal to $\R^n$: $\textrm{Fil}A = \R^n$
+    \item The dimension of the column space is $n$: $\dim \textrm{Col}\; A = n$
+    \item The range of $A$ is $n$: $\textrm{range}\; A = n$
+    \item The nullspace of $A$ is only the zero vector: $\textrm{Nul}\; A = \set{\bm{0}}$
+    \item The dimension of the null space is zero: $\dim \textrm{Nul}\; A = 0$
+    \item There is no eigenvalue of $0$ for $A$: $0 \notin \set{\lambda_1,\dots\,\lambda_n}$.
+    \item The determinant is not equal to $0$: $\det A \neq 0$.
+    \item The column space is perpendicular to the zero vector (and thus the null space): $(\textrm{Col}A)^\perp = \set{\bm{0}}$
+    \item The null space is perpendicular to the column space $\R^n$: $(\textrm{Nul}A)^\perp = \R^n$
+    \item $A$ has $n$ singular values different from $0$.
+\end{itemize}
+
+\end{document}
